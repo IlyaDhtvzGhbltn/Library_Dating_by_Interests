@@ -6,7 +6,8 @@ namespace Library.Contracts.MobileAndLibraryAPI.DTO
 {
     public enum Gender
     {
-        Men,
-        Woman
+        Men = 0,
+        Woman = 1,
+        Unknown = 2
     }
 }

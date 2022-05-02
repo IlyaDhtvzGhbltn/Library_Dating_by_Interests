@@ -1,0 +1,7 @@
+1
+Create user profile controller contains 4 endpoints :
+post	api/user/register/viayoutube (string youtubeToken) ret: internalToken, internalUserId
+get		api/user/profile/{internalToken} ret: CustomerProfile
+patch	api/user/profile/{internalToken} (CustomerProfile) ret: 200 | 401 | 500
+delete	api/user/profile/{internalToken} ret 200 | 401 | 500
+All methods have to work with abstractions which substitute database.
