@@ -5,3 +5,10 @@ get		api/user/profile/{internalToken} ret: CustomerProfile
 patch	api/user/profile/{internalToken} (CustomerProfile) ret: 200 | 401 | 500
 delete	api/user/profile/{internalToken} ret 200 | 401 | 500
 All methods have to work with abstractions which substitute database.
+
+002
+Create Dating Controller which contains three methods:
+get 	api/v1/dating/user/{internal_id}
+get 	api/v1/dating/ (dating_criteria) return urls["api/dating/user/{internal_id}"]
+patch	api/dating/user/{internal_id} (reaction=like|dislike)
+Methods should manage dummy services.
