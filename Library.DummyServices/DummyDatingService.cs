@@ -64,12 +64,16 @@ namespace Library.DummyServices
             }
         }
 
-        public Task<DatingProfile> EligibleProfile(string internalId)
+        public async Task<DatingProfile> EligibleProfile(string internalId)
         {
-            throw new NotImplementedException();
+            if (_internalIdToProfileMaping.ContainsKey(internalId))
+            {
+                return _internalIdToProfileMaping[internalId];
+            }
+            else return null;
         }
 
-        public Task ProfileReaction(string senderId, string profileId, Reaction reaction)
+        public async Task ProfileReaction(string senderId, string profileId, Reaction reaction)
         {
             throw new NotImplementedException();
         }

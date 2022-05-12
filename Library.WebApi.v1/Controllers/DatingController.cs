@@ -40,8 +40,16 @@ namespace Library.WebApi.v1.Controllers
             [FromHeader] string internalBearerToken)
         {
             DatingProfile profile = await _datingService.EligibleProfile(eligibleProfileId);
-            var resp = new EligibleProfileResponce(profile);
-            return resp;
+            if (profile != null)
+            {
+                var resp = new EligibleProfileResponce(profile);
+                return resp;
+            }
+            else 
+            {
+                this.HttpContext.Response.StatusCode = 404;
+                return null;
+            }
         }
 
 
