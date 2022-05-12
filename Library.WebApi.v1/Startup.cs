@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Swashbuckle.AspNetCore.Swagger;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
+using Library.Contracts.MobileAndLibraryAPI.DTO.Dating;
+using Library.DummyServices.DummyDto;
 
 namespace Library.WebApi.v1
 {
@@ -32,6 +34,8 @@ namespace Library.WebApi.v1
                 (new YouTubeDummyAuthenticationService<AuthenticateRequest, AuthenticateResponse>());
 
             services.AddSingleton<IUserDataService>(new DummyUserDataService());
+            services.AddSingleton<IDatingService>
+                (new DummyDatingService());
 #endif
         }
 

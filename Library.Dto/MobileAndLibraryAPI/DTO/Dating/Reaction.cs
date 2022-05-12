@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dating
 {
-    public class GeoCriteria
+    public class Reaction
     {
-        public int RadiusKm { get; set; }
-        public bool All { get; set; }
+        public ReactionVerbs Verb { get; set; }
     }
 }

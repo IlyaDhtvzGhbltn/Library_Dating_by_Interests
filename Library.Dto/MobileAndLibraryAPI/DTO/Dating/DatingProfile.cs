@@ -5,6 +5,11 @@ namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dating
 {
     public class DatingProfile
     {
+        public DatingProfile()
+        {
+            CommonInfo = new CommonInfo();
+        }
+
         public CommonInfo CommonInfo { get; set; }
         public Photo[] Photos { get; set; }
         public YouTubeSubscription[] YouTubeSubscriptions { get; set; }
