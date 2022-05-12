@@ -54,14 +54,22 @@ namespace Library.WebApi.v1.Controllers
 
 
         [HttpPatch]
-        [Route("user/{senderId}/reaction_on/{profileId}")]
+        [Route("user/{senderInternalId}/reaction_on/{profileId}")]
         public async Task<IResponse> Reaction(
-            [FromRoute]string senderId,
+            [FromRoute]string senderInternalId,
             [FromRoute]string profileId,
             [FromBody]ReactionRequest reactionRequest) 
         {
             Reaction reaction = reactionRequest.Reaction;
-            await _datingService.ProfileReaction(senderId, profileId, reaction);
+            bool ok = await _datingService.ProfileReaction(senderInternalId, profileId, reaction);
+            if (ok)
+            {
+                HttpContext.Response.StatusCode = 200;
+            }
+            else 
+            {
+                HttpContext.Response.StatusCode = 404;
+            }
             return null;
         }
     }

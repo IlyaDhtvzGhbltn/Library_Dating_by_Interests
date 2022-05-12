@@ -9,6 +9,6 @@ namespace Library.Services
     {
         public Task<Uri[]> EligibleProfiles(DatingCriteriaBase criteria);
         public Task<DatingProfile> EligibleProfile(string internalId);
-        public Task ProfileReaction(string senderId, string profileId, Reaction reaction);
+        public Task<bool> ProfileReaction(string senderInternalId, string profileId, Reaction reaction);
     }
 }

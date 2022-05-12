@@ -6,7 +6,7 @@ namespace Library.Contracts.MobileAndLibraryAPI.DTO
 {
     public enum ReactionVerbs
     {
-        Like,
-        Dislike
+        Like = 1,
+        Dislike = 0
     }
 }

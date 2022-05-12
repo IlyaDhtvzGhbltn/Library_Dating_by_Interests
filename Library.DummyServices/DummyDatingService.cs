@@ -1,11 +1,9 @@
 ﻿using Library.Contracts.MobileAndLibraryAPI.DTO.Dating;
-using Library.Contracts.MobileAndLibraryAPI.DTO.Profile;
 using Library.DummyServices.DummyDto;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Library.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.DummyServices
 {
@@ -73,9 +71,9 @@ namespace Library.DummyServices
             else return null;
         }
 
-        public async Task ProfileReaction(string senderId, string profileId, Reaction reaction)
+        public async Task<bool> ProfileReaction(string senderInternalId, string profileId, Reaction reaction)
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
