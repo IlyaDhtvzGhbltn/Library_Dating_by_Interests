@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dating
 {
-    public class GenderCriteria : IDatingCriteria
+    public class GenderCriteria
     {
         public Gender Gender { get; set; }
     }
