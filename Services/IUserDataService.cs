@@ -6,7 +6,7 @@ namespace Library.Services
 {
     public interface IUserDataService : IService
     {
-        Task<UserProfile> GetUserProfile(string internalId);
+        Task<UserProfile> GetProfileByInternalId(string internalId);
         Task DeleteProfile(string internalId);
         Task ChangeUserCommonInfo(string internalId, CommonInfo info);
         Task ChangeUserDatingCriteria(string internalId, DatingCriteria criteria);

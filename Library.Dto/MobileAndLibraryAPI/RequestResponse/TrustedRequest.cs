@@ -2,6 +2,5 @@
 {
     public class TrustedRequest : IRequest
     {
-        public string InternalBearerToken { get; set; }
     }
 }

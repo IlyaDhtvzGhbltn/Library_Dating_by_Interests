@@ -34,7 +34,7 @@ namespace Library.DummyServices
             _profileDB[internalId].DatingCriterias.Geo.RadiusKm = criteria.Geo.RadiusKm;
         }
 
-        public async Task<UserProfile> GetUserProfile(string internalId)
+        public async Task<UserProfile> GetProfileByInternalId(string internalId)
         {
             UserProfile profile;
 

@@ -30,12 +30,11 @@ namespace Library.WebApi.v1
             services.AddSingleton<IAuthenticationService<AuthenticateRequest, AuthenticateResponse>>
                 (new YouTubeAuthenticationService());
 #elif Dummy
+            services.AddSingleton<IUserDataService>(new DummyUserDataService());
+            services.AddSingleton<IDatingService>(new DummyDatingService());
+            services.AddSingleton<IDialogService>(new DummyDialogService());
             services.AddSingleton<IAuthenticationService<AuthenticateRequest, AuthenticateResponse>>
                 (new YouTubeDummyAuthenticationService<AuthenticateRequest, AuthenticateResponse>());
-            services.AddSingleton<IUserDataService>
-                (new DummyUserDataService());
-            services.AddSingleton<IDatingService>
-                (new DummyDatingService());
 #endif
         }
 

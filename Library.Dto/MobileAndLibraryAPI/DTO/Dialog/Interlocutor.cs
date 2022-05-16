@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dialog
 {
-    public class Sender
+    public class Interlocutor
     {
         public string Name { get; set; }
         public Uri Avatar { get; set; }
