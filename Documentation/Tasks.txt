@@ -12,3 +12,15 @@ get 	api/v1/dating/user/{internal_id}
 get 	api/v1/dating/ (dating_criteria) return urls["api/dating/user/{internal_id}"]
 patch	api/dating/user/{internal_id} (reaction=like|dislike)
 Methods should manage dummy services.
+
+003
+Create Dialogs Controller and dummy implementation
+
+GET api/dialogs/(internal user token) - 
+returns cutted dialogs collection. include interlocutor avatar, last message, last message time, new messages count
+GET api/dialogs/(dialogId) - 
+sent params offset&count returned obj{sender(avatar, name), messages[]{text, date}}
+POST api/dialogs/(dialogId) - 
+sends message
+DELETE api/dialog/(dialogId) - 
+deletes dialog for both users
