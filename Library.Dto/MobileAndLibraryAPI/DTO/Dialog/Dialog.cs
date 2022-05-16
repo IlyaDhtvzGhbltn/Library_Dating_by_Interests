@@ -6,7 +6,7 @@ namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dialog
 {
     public class Dialog
     {
-        public Sender Friend { get; set; }
+        public Interlocutor Interlocutor { get; set; }
         public string FriendsOnlineStatus { get; set; }
         public bool IsFriendOnline { get; set; }
         public ICollection<Message> Messages { get; set; }

@@ -38,7 +38,7 @@ namespace Library.WebApi.v1.Controllers
             [FromRoute] string internalId,
             [FromHeader] string internalBearerToken)
         {
-            UserProfile profile = await _userDataService.GetUserProfile(internalId);
+            UserProfile profile = await _userDataService.GetProfileByInternalId(internalId);
             var profileResponse = new UserProfileResponse(profile);
             return profileResponse;
         }
