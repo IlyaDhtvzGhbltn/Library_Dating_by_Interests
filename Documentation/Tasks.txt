@@ -24,3 +24,7 @@ POST api/dialogs/(dialogId) -
 sends message
 DELETE api/dialog/(dialogId) - 
 deletes dialog for both users
+
+004
+Code Refactor
+Move Internal User Id and Internal Bearer Token from body to headers for all controllers methods.

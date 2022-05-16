@@ -1,6 +1,7 @@
 ﻿using Library.Contracts.MobileAndLibraryAPI.DTO.Dialog;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Dialog;
 using Library.Services;
+using Library.WebApi.v1.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace Library.WebApi.v1.Controllers
 {
     [ApiController]
     [Route("api/v1/")]
+    [AuthorizationFilter]
     public class DialogsController : ControllerBase
     {
         private readonly IDialogService _dialogService;
@@ -24,8 +26,7 @@ namespace Library.WebApi.v1.Controllers
         [HttpGet]
         [Route("dialogsbyuser/{internalUserId}")]
         public async Task<DialogPreview[]> PreviewDialogs(
-            [FromRoute]string internalUserId,
-            [FromHeader] string internalBearerToken) 
+            [FromRoute]string internalUserId) 
         {
             DialogPreview[] dialogs = await _dialogService.PreviewDialogs(internalUserId);
             return dialogs;
@@ -34,8 +35,6 @@ namespace Library.WebApi.v1.Controllers
         [HttpGet]
         [Route("dialog/{dialogId}")]
         public async Task<Dialog> OpenDialog(
-            [FromHeader] string internalUserId,
-            [FromHeader] string internalBearerToken,
             [FromRoute] string dialogId
             )
         {
@@ -46,8 +45,6 @@ namespace Library.WebApi.v1.Controllers
         [HttpGet]
         [Route("dialog/{dialogId}/moremessages")]
         public async Task<Message[]> MoreMessages(
-            [FromHeader] string internalUserId,
-            [FromHeader] string internalBearerToken,
             [FromRoute] string dialogId,
             [FromQuery] int offset,
             [FromQuery] int count) 
@@ -61,7 +58,6 @@ namespace Library.WebApi.v1.Controllers
         [Route("dialog/{dialogId}")]
         public async Task<bool> SendMessage(
             [FromHeader] string internalUserId,
-            [FromHeader] string internalBearerToken,
             [FromRoute]string dialogId,
             [FromBody] SendMessageIntoDialogRequest request) 
         {

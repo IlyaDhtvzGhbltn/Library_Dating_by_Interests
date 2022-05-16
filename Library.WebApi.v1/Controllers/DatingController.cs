@@ -3,6 +3,7 @@ using Library.Contracts.MobileAndLibraryAPI.DTO.Profile;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Datings;
 using Library.Services;
+using Library.WebApi.v1.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace Library.WebApi.v1.Controllers
 {
     [ApiController]
+    [AuthorizationFilter]
     [Route("api/v1/dating")]
     public class DatingController : ControllerBase
     {
@@ -24,7 +26,6 @@ namespace Library.WebApi.v1.Controllers
         [HttpGet]
         [Route("user")]
         public async Task<IResponse> GetEligibleUsers(
-            [FromHeader] string internalBearerToken,
             [FromQuery] DatingCriteria criterias)
         {
             Uri[] eligibleProfiles = await _datingService.EligibleProfiles(criterias);
@@ -36,8 +37,7 @@ namespace Library.WebApi.v1.Controllers
         [HttpGet]
         [Route("user/{eligibleProfileId}")]
         public async Task<IResponse> GetEligibleUser(
-            [FromRoute]  string eligibleProfileId, 
-            [FromHeader] string internalBearerToken)
+            [FromRoute]  string eligibleProfileId)
         {
             DatingProfile profile = await _datingService.EligibleProfile(eligibleProfileId);
             if (profile != null)
