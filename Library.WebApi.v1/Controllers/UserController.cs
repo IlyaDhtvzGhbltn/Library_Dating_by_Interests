@@ -3,6 +3,7 @@ using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Authentication;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Profile;
 using Library.Services;
+using Library.WebApi.v1.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -33,10 +34,9 @@ namespace Library.WebApi.v1.Controllers
 
 
         [HttpGet]
+        [AuthorizationFilter]
         [Route("profile/{internalId}")]
-        public async Task<IResponse> UserProfile(
-            [FromRoute] string internalId,
-            [FromHeader] string internalBearerToken)
+        public async Task<IResponse> UserProfile([FromRoute] string internalId)
         {
             UserProfile profile = await _userDataService.GetProfileByInternalId(internalId);
             var profileResponse = new UserProfileResponse(profile);
@@ -44,6 +44,7 @@ namespace Library.WebApi.v1.Controllers
         }
 
         [HttpPatch]
+        [AuthorizationFilter]
         [Route("profile/{internalId}")]
         public async Task ChangeUserProfile(
             [FromRoute] string internalId, 
@@ -54,10 +55,10 @@ namespace Library.WebApi.v1.Controllers
         }
 
         [HttpDelete]
+        [AuthorizationFilter]
         [Route("profile/{internalId}")]
         public async Task DeleteProfile(
-            [FromRoute] string internalId, 
-            [FromBody] TrustedRequest request) 
+            [FromRoute] string internalId) 
         {
             await _userDataService.DeleteProfile(internalId);
             this.HttpContext.Response.StatusCode = 202;
