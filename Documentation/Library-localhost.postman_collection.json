@@ -1,0 +1,499 @@
+{
+	"info": {
+		"_postman_id": "274941c4-b8bb-4c2c-b77a-6f2a2de69d4c",
+		"name": "Library-localhost",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Open Profile Info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/profile/4e09fa0c",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"profile",
+								"4e09fa0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Profile Info",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"CommonInfo\" : \r\n    {\r\n        \"Name\" : \"Ivan333\",\r\n        \"About\" : \"Hello Library!\",\r\n        \"Age\" : 28,\r\n        \"Gender\" : 0\r\n    },\r\n    \"DatingCriteria\" : \r\n    {\r\n        \"Age\" : \r\n        {\r\n            \"MinAge\" : 16,\r\n            \"MaxAge\" : 27\r\n        },\r\n        \"Geo\" : \r\n        {\r\n            \"RadiusKm\" : 100,\r\n            \"All\" : false\r\n        },\r\n        \"Gender\" : \r\n        {\r\n            \"Gender\" : 1\r\n        },\r\n        \"MySubscriptions\":[\"1\", \"2\"]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44383/api/v1/profile/4e09fa0c",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"profile",
+								"4e09fa0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Profile",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44383/api/v1/profile/4e09fa0c",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"profile",
+								"4e09fa0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration via youtube",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44383/api/v1/auth/youtube",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"youtube"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dating",
+			"item": [
+				{
+					"name": "All Eligible Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/dating/user?Age.MinAge=18&Age.MaxAge=25&Geo.RadiusKm=200&Geo.All=false&Gender.Gender=1&MySubscriptions=UCSJ4gkVC6NrvII8umztf0Ow&MySubscriptions=UCuw1VDsmOWOldKGLYq6AkVg",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"dating",
+								"user"
+							],
+							"query": [
+								{
+									"key": "Age.MinAge",
+									"value": "18"
+								},
+								{
+									"key": "Age.MaxAge",
+									"value": "25"
+								},
+								{
+									"key": "Geo.RadiusKm",
+									"value": "200"
+								},
+								{
+									"key": "Geo.All",
+									"value": "false"
+								},
+								{
+									"key": "Gender.Gender",
+									"value": "1"
+								},
+								{
+									"key": "MySubscriptions",
+									"value": "UCSJ4gkVC6NrvII8umztf0Ow"
+								},
+								{
+									"key": "MySubscriptions",
+									"value": "UCuw1VDsmOWOldKGLYq6AkVg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eligible User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/dating/user/6c9ff986-0900-42d3-aa93-38cc8b1c11d4",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"dating",
+								"user",
+								"6c9ff986-0900-42d3-aa93-38cc8b1c11d4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User reaction",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Reaction\":\r\n        {\"Verb\": 1} \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44383/api/v1/dating/user/4e09fa0c/reaction_on/6c9ff986-0900-42d3-aa93-38cc8b1c11d4",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"dating",
+								"user",
+								"4e09fa0c",
+								"reaction_on",
+								"6c9ff986-0900-42d3-aa93-38cc8b1c11d4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dialogs",
+			"item": [
+				{
+					"name": "Preview All Dialogs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/dialogsbyuser/4e09fa0c",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"dialogsbyuser",
+								"4e09fa0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Open One Dialog",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/dialog/98c4a063946f-8136-4c5c-932b-4acf214e",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"dialog",
+								"98c4a063946f-8136-4c5c-932b-4acf214e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "More Dialog Messages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/dialog/98c4a063946f-8136-4c5c-932b-4acf214e/moremessages?offset=20&count=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"dialog",
+								"98c4a063946f-8136-4c5c-932b-4acf214e",
+								"moremessages"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "20"
+								},
+								{
+									"key": "count",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"MessageText\" : \"Как дела???\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44383/api/v1/dialog/98c4a063946f-8136-4c5c-932b-4acf214e",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"dialog",
+								"98c4a063946f-8136-4c5c-932b-4acf214e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Dialog",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/dialog/98c4a063946f-8136-4c5c-932b-4acf214e",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"dialog",
+								"98c4a063946f-8136-4c5c-932b-4acf214e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
