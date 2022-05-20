@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Library.Contracts.MobileAndLibraryAPI.RequestResponse.Authentication
 {
-    public class AuthenticateRequest : IRequest
+    public class SignInResponse : IResponse
     {
-        public string ExternalId { get; set; }
-        public string Token { get; set; }
+        public string InternalToken { get; set; }
+        public string InternalUserId { get; set; }
     }
 }

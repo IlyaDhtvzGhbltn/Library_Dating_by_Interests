@@ -1,4 +1,4 @@
-1
+001 - (1)
 Create user profile controller contains 4 endpoints :
 post	api/user/auth/viayoutube (string youtubeToken) ret: internalToken, internalUserId
 get		api/user/profile/{internalToken} ret: CustomerProfile
@@ -28,3 +28,7 @@ deletes dialog for both users
 004
 Code Refactor
 Move Internal User Id and Internal Bearer Token from body to headers for all controllers methods.
+
+005
+Create Controller for user photos.
+Images should be stored in Azure Cloud and be accessed by URI.  

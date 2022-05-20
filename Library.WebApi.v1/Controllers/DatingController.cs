@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Library.WebApi.v1.Controllers
 {
     [ApiController]
-    [AuthorizationFilter]
+    [AuthenticationFilter]
     [Route("api/v1/dating")]
     public class DatingController : ControllerBase
     {

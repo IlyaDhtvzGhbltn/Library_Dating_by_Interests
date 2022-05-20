@@ -6,25 +6,26 @@ using System.Collections.Generic;
 
 namespace Library.DummyServices
 {
-    public class YouTubeDummyAuthenticationService<TRequest, TResponse>
-        : IAuthenticationService<TRequest, TResponse>
-        where TRequest : AuthenticateRequest
-        where TResponse : AuthenticateResponse
+    public class YouTubeDummySignInService<TRequest, TResponse>
+        : ISignInService<TRequest, TResponse>
+        where TRequest : SignInRequest
+        where TResponse : SignInResponse
     {
-        private List<AuthenticateResponse> _db = new List<AuthenticateResponse>();
+        private List<SignInResponse> _db = new List<SignInResponse>();
 
-        public async Task<TResponse> Auth(TRequest request)
+        public async Task<TResponse> SignIn(TRequest request)
         {
             string internalToken = Guid.NewGuid().ToString();
             string internalId = Guid.NewGuid().ToString();
 
-            var responce = new AuthenticateResponse() 
+            var responce = new SignInResponse() 
             {
                 InternalToken = internalToken,
                 InternalUserId = internalId
             };
             _db.Add(responce);
 
+            
             return (TResponse)responce;
         }
     }

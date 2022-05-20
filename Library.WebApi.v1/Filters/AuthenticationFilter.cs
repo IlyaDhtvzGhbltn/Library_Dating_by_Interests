@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Library.WebApi.v1.Filters
 {
-    public class AuthorizationFilter : ActionFilterAttribute, IAsyncAuthorizationFilter
+    public class AuthenticationFilter : ActionFilterAttribute, IAsyncAuthorizationFilter
     {
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthorizationFilter()
+        public AuthenticationFilter()
         {
 #if Dummy
-            _authorizationService = new DummyServices.DummyAuthorizationService();
+            _authenticationService = new DummyServices.DummyAuthenticationService();
 #else
             _authorizationService = null;
 #endif
@@ -25,11 +25,11 @@ namespace Library.WebApi.v1.Filters
             StringValues internalIdHeader = context.HttpContext.Request.Headers["InternalUserId"];
             if (string.IsNullOrWhiteSpace(bearerTokenHeader) | string.IsNullOrWhiteSpace(internalIdHeader))
             {
-                context.Result = new BadRequestResult();
+                context.Result = new UnauthorizedResult();
                 return;
             }
 
-            bool isUserAuthorized = await _authorizationService.Authorize(bearerTokenHeader, internalIdHeader);
+            bool isUserAuthorized = await _authenticationService.IsAuthenticated(bearerTokenHeader, internalIdHeader);
             if (!isUserAuthorized)
             {
                 context.Result = new UnauthorizedResult();
