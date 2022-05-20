@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Library.Entities
+namespace Library.WebApi.v1.Entities
 {
     public class YoutubeChanell
     {

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Library.Entities
+namespace Library.WebApi.v1.Entities
 {
     public class CustomerYoutubeChanell
     {
-        public string CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public string UserId { get; set; }
+        public ApiUser User { get; set; }
         public string YoutubeChanellId { get; set; }
         public YoutubeChanell YoutubeChanell { get; set; }
     }

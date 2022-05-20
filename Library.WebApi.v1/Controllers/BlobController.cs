@@ -33,7 +33,7 @@ namespace Library.WebApi.v1.Controllers
             string fileUrl;
             using (var stream = file.OpenReadStream())
             {
-                fileUrl = _storageService.SaveFile(stream);
+                fileUrl = _storageService.SaveFile(stream, userId);
                 Response.StatusCode = 201;
             }
             string photoId = _userPhotoService.SaveUserPhotoUrlDB(userId, new Uri(fileUrl));
@@ -53,7 +53,7 @@ namespace Library.WebApi.v1.Controllers
             [FromRoute] string photoId) 
         {
             bool deleteFromDB = _userPhotoService.DeletePhotoFromDB(photoId);
-            bool deleteFromStorage = _storageService.DelteFile(photoId);
+            bool deleteFromStorage = _storageService.DelteFile(photoId, userId);
             if (deleteFromDB && deleteFromStorage)
             {
                 Response.StatusCode = 202;

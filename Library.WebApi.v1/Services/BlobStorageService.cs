@@ -14,7 +14,6 @@ namespace Library.WebApi.v1.Services
     public class BlobStorageService : IStorageService
     {
         private string _connectionString;
-        private string _containerName;
         private string _accountName;
         private string _accountKey;
         private string _blobURL;
@@ -22,17 +21,16 @@ namespace Library.WebApi.v1.Services
         public BlobStorageService(AzureBlobStorageOptions options)
         {
             _connectionString = options.ConnectionString;
-            _containerName = options.ContainerName;
             _accountName = options.AccountName;
             _accountKey = options.AccountKey;
             _blobURL = options.BlobUrl;
         }
 
-        public string SaveFile(Stream fileStream)
+        public string SaveFile(Stream fileStream, string containerName)
         {
             var service = new BlobServiceClient(_connectionString);
-            BlobContainerClient container = service.GetBlobContainerClient(_containerName);
-            container.CreateIfNotExists();
+            BlobContainerClient container = service.GetBlobContainerClient(containerName);
+            container.CreateIfNotExists(PublicAccessType.BlobContainer);
 
             string fileName = Guid.NewGuid().ToString();
             BlobClient  blobClient = container.GetBlobClient(fileName);
@@ -42,15 +40,15 @@ namespace Library.WebApi.v1.Services
             };
             blobClient.Upload(fileStream, headers);
 
-            string url = _blobURL + fileName;
+            string url = string.Format(_blobURL, containerName, fileName);
             return url;
         }
 
-        public bool DelteFile(string fileName)
+        public bool DelteFile(string fileName, string containerName)
         {
             var service = new BlobServiceClient(_connectionString);
-            BlobContainerClient container = service.GetBlobContainerClient(_containerName);
-            bool exist = FileExists(fileName);
+            BlobContainerClient container = service.GetBlobContainerClient(containerName);
+            bool exist = FileExists(fileName, containerName);
             if (exist)
             {
                 Response result = container.DeleteBlob(fileName);
@@ -69,10 +67,10 @@ namespace Library.WebApi.v1.Services
             }
         }
 
-        public bool FileExists(string fileName)
+        public bool FileExists(string fileName, string containerName)
         {
             var service = new BlobServiceClient(_connectionString);
-            BlobContainerClient container = service.GetBlobContainerClient(_containerName);
+            BlobContainerClient container = service.GetBlobContainerClient(containerName);
             BlobClient blob = container.GetBlobClient(fileName);
             bool exists = false;
             try

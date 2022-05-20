@@ -9,8 +9,8 @@ namespace Library.WebApi.v1.Infrastructure
     {
         public const string BlobStorageKey = "AzureOptions:Storage:Key";
         public const string BlobStorageConnectionString = "AzureOptions:Storage:ConnectionString";
-        public const string BlobStorageContainerName = "AzureOptions:Storage:ContainerName";
         public const string BlobStorageAccountName = "AzureOptions:Storage:AccountName";
         public const string BlobURL = "AzureOptions:Storage:BlobUrl";
+        public const string ConnectionString = "ConnectionStrings:LibraryUsers";
     }
 }

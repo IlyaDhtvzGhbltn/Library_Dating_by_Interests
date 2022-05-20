@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Library.Contracts.Azure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Library.WebApi.v1
 {
@@ -23,6 +25,10 @@ namespace Library.WebApi.v1
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<LibraryDatabaseContext>(options => 
+                options.UseSqlServer(Configuration.GetSection(AppSettings.ConnectionString).Value));
+
+
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddMvc();
@@ -55,6 +61,7 @@ namespace Library.WebApi.v1
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -69,7 +76,6 @@ namespace Library.WebApi.v1
             string blobKey = Configuration.GetSection(AppSettings.BlobStorageKey).Value;
             string connectionString = Configuration.GetSection(AppSettings.BlobStorageConnectionString).Value;
             string accountName = Configuration.GetSection(AppSettings.BlobStorageAccountName).Value;
-            string containerName = Configuration.GetSection(AppSettings.BlobStorageContainerName).Value;
             string blobURL = Configuration.GetSection(AppSettings.BlobURL).Value;
 
             var options = new AzureBlobStorageOptions()
@@ -77,7 +83,6 @@ namespace Library.WebApi.v1
                 AccountKey = blobKey,
                 ConnectionString = connectionString,
                 AccountName = accountName,
-                ContainerName = containerName, 
                 BlobUrl = blobURL
             };
 
