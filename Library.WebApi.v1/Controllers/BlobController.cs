@@ -26,7 +26,16 @@ namespace Library.WebApi.v1.Controllers
         [Route("uploadphoto")]
         public async Task<UploadPhotoResponse> UploadPhoto([FromForm] IFormFile file)
         {
-            return null;
+            string fileUrl;
+            using (var stream = file.OpenReadStream())
+            {
+                fileUrl = _storageService.SaveFile(stream);
+                Response.StatusCode = 201;
+            }
+            return new UploadPhotoResponse()
+            {
+                PhotoUri = new Uri(fileUrl)
+            };
         }
     }
 

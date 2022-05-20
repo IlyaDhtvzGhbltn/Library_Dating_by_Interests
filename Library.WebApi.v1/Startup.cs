@@ -69,13 +69,15 @@ namespace Library.WebApi.v1
             string connectionString = Configuration.GetSection(AppSettings.BlobStorageConnectionString).Value;
             string accountName = Configuration.GetSection(AppSettings.BlobStorageAccountName).Value;
             string containerName = Configuration.GetSection(AppSettings.BlobStorageContainerName).Value;
+            string blobURL = Configuration.GetSection(AppSettings.BlobURL).Value;
 
             var options = new AzureBlobStorageOptions()
             {
                 AccountKey = blobKey,
                 ConnectionString = connectionString,
                 AccountName = accountName,
-                ContainerName = containerName
+                ContainerName = containerName, 
+                BlobUrl = blobURL
             };
 
             return options;
