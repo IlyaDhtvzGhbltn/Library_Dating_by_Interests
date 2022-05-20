@@ -22,14 +22,11 @@ namespace Library.WebApi.v1.Controllers
             _storageService = storageService;
         }
 
-        [HttpPost("uploadphoto")]
-        public async Task<UploadPhotoResponse> UploadPhoto([FromBody]IFormFile file)
+        [HttpPost]
+        [Route("uploadphoto")]
+        public async Task<UploadPhotoResponse> UploadPhoto([FromForm] IFormFile file)
         {
-            string fileId = _storageService.SaveFile(file.OpenReadStream());
-            return new UploadPhotoResponse() 
-            {
-                PhotoId = fileId 
-            };
+            return null;
         }
     }
 

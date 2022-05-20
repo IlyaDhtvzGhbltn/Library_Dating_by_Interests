@@ -25,7 +25,7 @@ namespace Library.WebApi.v1.Filters
             StringValues internalIdHeader = context.HttpContext.Request.Headers["InternalUserId"];
             if (string.IsNullOrWhiteSpace(bearerTokenHeader) | string.IsNullOrWhiteSpace(internalIdHeader))
             {
-                context.Result = new BadRequestResult();
+                context.Result = new UnauthorizedResult();
                 return;
             }
 
