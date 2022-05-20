@@ -46,14 +46,43 @@ namespace Library.WebApi.v1.Services
             return url;
         }
 
-        public void DelteFile(string fileName)
+        public bool DelteFile(string fileName)
         {
-            throw new NotImplementedException();
+            var service = new BlobServiceClient(_connectionString);
+            BlobContainerClient container = service.GetBlobContainerClient(_containerName);
+            bool exist = FileExists(fileName);
+            if (exist)
+            {
+                Response result = container.DeleteBlob(fileName);
+                if (result.Status == 202)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else 
+            {
+                return false;
+            }
         }
 
-        public bool FileExists(string path)
+        public bool FileExists(string fileName)
         {
-            throw new NotImplementedException();
+            var service = new BlobServiceClient(_connectionString);
+            BlobContainerClient container = service.GetBlobContainerClient(_containerName);
+            BlobClient blob = container.GetBlobClient(fileName);
+            bool exists = false;
+            try
+            {
+                exists = blob.Exists();
+            }
+            catch (Exception)
+            {
+            }
+            return exists;
         }
 
         public string GetUriByID(string id)

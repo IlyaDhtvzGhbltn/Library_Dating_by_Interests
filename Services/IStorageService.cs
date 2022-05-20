@@ -8,7 +8,7 @@ namespace Library.Services
     public interface IStorageService
     {
         string SaveFile(Stream fileStream);
-        void DelteFile(string fileName);
+        bool DelteFile(string fileName);
         bool FileExists(string path);
         string GetUriByID(string fileId);
     }

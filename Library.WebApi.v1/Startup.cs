@@ -28,17 +28,18 @@ namespace Library.WebApi.v1
             services.AddMvc();
             services.AddMvcCore();
 
+            AzureBlobStorageOptions options = GetAzureOptions();
 #if !Dummy
             //services.AddSingleton<IAuthenticationService<AuthenticateRequest, AuthenticateResponse>>
             //    (new YouTubeAuthenticationService());
 #elif Dummy
+            services.AddSingleton<ISignInService<SignInRequest, SignInResponse>>
+                (new YouTubeDummySignInService<SignInRequest, SignInResponse>());
             services.AddSingleton<IUserDataService>(new DummyUserDataService());
             services.AddSingleton<IDatingService>(new DummyDatingService());
             services.AddSingleton<IDialogService>(new DummyDialogService());
-            services.AddSingleton<IAuthenticationService<AuthenticateRequest, AuthenticateResponse>>
-                (new YouTubeDummyAuthenticationService<AuthenticateRequest, AuthenticateResponse>());
+            services.AddSingleton<IUserPhotosService>(new DummyUserPhotosService());
 #endif
-            AzureBlobStorageOptions options = GetAzureOptions();
             services.AddSingleton<IStorageService>(new BlobStorageService(options));
         }
 

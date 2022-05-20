@@ -13,7 +13,7 @@ namespace Library.WebApi.v1.Controllers
 {
     [ApiController]
     [Route("api/v1/")]
-    [AuthorizationFilter]
+    [AuthenticationFilter]
     public class DialogsController : ControllerBase
     {
         private readonly IDialogService _dialogService;

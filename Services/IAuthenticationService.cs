@@ -1,12 +1,12 @@
-﻿using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Library.Services
 {
-    public interface IAuthenticationService<TRequest, TResponse> : IService
-        where TRequest : IRequest
-        where TResponse : IResponse
+    public interface IAuthenticationService
     {
-        Task<TResponse> Auth(TRequest request);
+        Task<bool> IsAuthenticated(string internalId, string bearerToken);
     }
 }

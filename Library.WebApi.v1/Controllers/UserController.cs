@@ -13,11 +13,11 @@ namespace Library.WebApi.v1.Controllers
     [Route("api/v1")]
     public class UserController : ControllerBase
     {
-        private readonly IAuthenticationService<AuthenticateRequest, AuthenticateResponse> _authenticationService;
+        private readonly ISignInService<SignInRequest, SignInResponse> _authenticationService;
         private readonly IUserDataService _userDataService;
 
         public UserController(
-            IAuthenticationService<AuthenticateRequest, AuthenticateResponse> authenticationService,
+            ISignInService<SignInRequest, SignInResponse> authenticationService,
             IUserDataService userDataService)
         {
             _userDataService = userDataService;
@@ -26,15 +26,15 @@ namespace Library.WebApi.v1.Controllers
 
         [HttpPost]
         [Route("auth/youtube")]
-        public async Task<IResponse> AuthenticationViaYouTube(AuthenticateRequest request)
+        public async Task<IResponse> AuthenticationViaYouTube(SignInRequest request)
         {
-            AuthenticateResponse response = await _authenticationService.Auth(request);
+            SignInResponse response = await _authenticationService.SignIn(request);
             return response;
         }
 
 
         [HttpGet]
-        [AuthorizationFilter]
+        [AuthenticationFilter]
         [Route("profile/{internalId}")]
         public async Task<IResponse> UserProfile([FromRoute] string internalId)
         {
@@ -44,7 +44,7 @@ namespace Library.WebApi.v1.Controllers
         }
 
         [HttpPatch]
-        [AuthorizationFilter]
+        [AuthenticationFilter]
         [Route("profile/{internalId}")]
         public async Task ChangeUserProfile(
             [FromRoute] string internalId, 
@@ -55,7 +55,7 @@ namespace Library.WebApi.v1.Controllers
         }
 
         [HttpDelete]
-        [AuthorizationFilter]
+        [AuthenticationFilter]
         [Route("profile/{internalId}")]
         public async Task DeleteProfile(
             [FromRoute] string internalId) 
