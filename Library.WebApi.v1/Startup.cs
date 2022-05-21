@@ -30,7 +30,6 @@ namespace Library.WebApi.v1
             services.AddDbContext<LibraryDatabaseContext>(options => 
                 options.UseSqlServer(Configuration.GetSection(AppSettings.ConnectionString).Value));
 
-
             services.AddAuthentication();
             services.ConfigureIdentity();
             services.AddAuthorization();

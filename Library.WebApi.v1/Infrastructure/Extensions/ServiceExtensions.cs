@@ -17,7 +17,7 @@ namespace Library.WebApi.v1.Infrastructure.Extensions
     {
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            IdentityBuilder builder = services.AddIdentityCore<ApiUser>();
+            IdentityBuilder builder = services.AddIdentityCore<User>();
             builder.AddEntityFrameworkStores<LibraryDatabaseContext>();
         }
 
