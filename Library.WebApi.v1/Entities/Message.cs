@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Library.Entities
+namespace Library.WebApi.v1.Entities
 {
     public class Message
     {
@@ -11,6 +11,6 @@ namespace Library.Entities
         public string Text { get; set; }
 
         public virtual Dialog Dialog { get; set; }
-        public virtual YoutubeChanell Sender { get; set; }
+        public virtual User Sender { get; set; }
     }
 }

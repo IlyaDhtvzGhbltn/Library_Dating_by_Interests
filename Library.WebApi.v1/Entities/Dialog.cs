@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Library.Entities
+namespace Library.WebApi.v1.Entities
 {
     public class Dialog
     {
         public Guid Id { get; set; }
-        public ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

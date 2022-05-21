@@ -494,6 +494,134 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Photos",
+			"item": [
+				{
+					"name": "Upload Photo",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "File",
+									"type": "file",
+									"src": "/D:/MyUtilits/CV/Developer/img/azure.png"
+								},
+								{
+									"key": "text",
+									"value": "sdfdfs",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://localhost:44383/api/v1/user/ae5f1d82/uploadphoto",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ae5f1d82",
+								"uploadphoto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Photo",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/user/ae5f1d82/photo/83ed1848-7fb9-4ae4-878a-7196745ddf59",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ae5f1d82",
+								"photo",
+								"83ed1848-7fb9-4ae4-878a-7196745ddf59"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Photo As Avatar",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "InternalBearerToken",
+								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
+								"type": "text"
+							},
+							{
+								"key": "InternalUserId",
+								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:44383/api/v1/user/ae5f1d82/setavatarphoto/83ed1848-7fb9-4ae4-878a-7196745ddf59",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44383",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"ae5f1d82",
+								"setavatarphoto",
+								"83ed1848-7fb9-4ae4-878a-7196745ddf59"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

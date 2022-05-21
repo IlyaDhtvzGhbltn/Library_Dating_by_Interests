@@ -32,3 +32,6 @@ Move Internal User Id and Internal Bearer Token from body to headers for all con
 005
 Create Controller for user photos.
 Images should be stored in Azure Cloud and be accessed by URI.  
+
+006
+DB Code-first refactoring and actualising
