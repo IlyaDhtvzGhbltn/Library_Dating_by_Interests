@@ -35,3 +35,6 @@ Images should be stored in Azure Cloud and be accessed by URI.
 
 006
 DB Code-first refactoring and actualising
+
+007
+JWT implementation
