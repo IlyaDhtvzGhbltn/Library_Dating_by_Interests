@@ -9,10 +9,6 @@ namespace Library.WebApi.v1.Entities
 {
     public class ApiUser : IdentityUser
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid UserInternalId { get; set; }
-
         public string YoutubeUserId { get; set; }
         public string YoutubeUserName { get; set; }
 

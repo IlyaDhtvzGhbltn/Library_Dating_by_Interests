@@ -14,7 +14,7 @@ namespace Library.WebApi.v1
         public LibraryDatabaseContext(DbContextOptions options) : base(options)
         {}
 
-        public DbSet<ApiUser> Users { get; set; }
+        public DbSet<ApiUser> ApiUsers { get; set; }
         public DbSet<Dialog> Dialogs { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<YoutubeChanell> YoutubeChanells { get; set; }

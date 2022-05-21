@@ -10,46 +10,39 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Library.Contracts.Azure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using Library.WebApi.v1.Infrastructure.Extensions;
 
 namespace Library.WebApi.v1
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        public IConfiguration Configuration { get; }
+
+
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<LibraryDatabaseContext>(options => 
                 options.UseSqlServer(Configuration.GetSection(AppSettings.ConnectionString).Value));
 
 
-            services.AddControllers();
-            services.AddSwaggerGen();
-            services.AddMvc();
-            services.AddMvcCore();
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.AddAuthorization();
 
-            AzureBlobStorageOptions options = GetAzureOptions();
-#if !Dummy
-            //services.AddSingleton<IAuthenticationService<AuthenticateRequest, AuthenticateResponse>>
-            //    (new YouTubeAuthenticationService());
-#elif Dummy
-            services.AddSingleton<ISignInService<SignInRequest, SignInResponse>>
-                (new YouTubeDummySignInService<SignInRequest, SignInResponse>());
-            services.AddSingleton<IUserDataService>(new DummyUserDataService());
-            services.AddSingleton<IDatingService>(new DummyDatingService());
-            services.AddSingleton<IDialogService>(new DummyDialogService());
-            services.AddSingleton<IUserPhotosService>(new DummyUserPhotosService());
-#endif
-            services.AddSingleton<IStorageService>(new BlobStorageService(options));
+            services.ConfigureCoreServices();
+            services.ConfigureAzure(Configuration.GetAzureOptions());
+
+            services.AddSwaggerGen();
+            services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -58,35 +51,13 @@ namespace Library.WebApi.v1
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
             app.UseSwagger();
-        }
-
-        private AzureBlobStorageOptions GetAzureOptions() 
-        {
-            string blobKey = Configuration.GetSection(AppSettings.BlobStorageKey).Value;
-            string connectionString = Configuration.GetSection(AppSettings.BlobStorageConnectionString).Value;
-            string accountName = Configuration.GetSection(AppSettings.BlobStorageAccountName).Value;
-            string blobURL = Configuration.GetSection(AppSettings.BlobURL).Value;
-
-            var options = new AzureBlobStorageOptions()
-            {
-                AccountKey = blobKey,
-                ConnectionString = connectionString,
-                AccountName = accountName,
-                BlobUrl = blobURL
-            };
-
-            return options;
         }
     }
 }
