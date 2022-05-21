@@ -51,12 +51,14 @@ namespace Library.WebApi.v1
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseSwagger();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            app.UseSwagger();
         }
     }
 }
