@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Library.WebApi.v1.Entities
+namespace Library.Entities
 {
-    public class User : IdentityUser
+    public class ApiUser : IdentityUser
     {
-        public Guid InternalId { get; set; }
         public string YoutubeUserId { get; set; }
         public string YoutubeUserName { get; set; }
 

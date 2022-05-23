@@ -1,6 +1,6 @@
 ﻿namespace Library.Contracts.MobileAndLibraryAPI.RequestResponse.Dialog
 {
-    public class SendMessageIntoDialogRequest : TrustedRequest
+    public class SendMessageIntoDialogRequest : ApiRequest
     {
         public string MessageText { get; set; }
     }

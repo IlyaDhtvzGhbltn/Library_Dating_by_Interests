@@ -1,6 +1,6 @@
 ﻿using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Profile.Photo;
 using Library.Services;
-using Library.WebApi.v1.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Library.WebApi.v1.Controllers
 {
-    [AuthenticationFilter]
+    [Authorize]
     [ApiController]
     [Route("api/v1")]
     public class BlobController : ControllerBase

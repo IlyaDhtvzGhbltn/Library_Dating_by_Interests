@@ -3,7 +3,7 @@ using Library.Contracts.MobileAndLibraryAPI.DTO.Profile;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Datings;
 using Library.Services;
-using Library.WebApi.v1.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Library.WebApi.v1.Controllers
 {
     [ApiController]
-    [AuthenticationFilter]
+    [Authorize]
     [Route("api/v1/dating")]
     public class DatingController : ControllerBase
     {

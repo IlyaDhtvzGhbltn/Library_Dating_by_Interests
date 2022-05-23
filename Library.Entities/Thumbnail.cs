@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Library.WebApi.v1.Entities
+namespace Library.Entities
 {
     public class Thumbnail
     {

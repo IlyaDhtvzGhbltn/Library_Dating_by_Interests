@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Library.WebApi.v1.Entities
+namespace Library.Entities
 {
     public class Photo
     {
@@ -13,7 +13,7 @@ namespace Library.WebApi.v1.Entities
         public Guid PhotoId { get; set; }
 
 
-        [MaxLength(120)]
+        [MaxLength(264)]
         [DataType(DataType.Url)]
         [Required]
         public Uri PhotoUrl { get; set; }

@@ -1,7 +1,7 @@
 ﻿using Library.Contracts.MobileAndLibraryAPI.DTO.Dialog;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Dialog;
 using Library.Services;
-using Library.WebApi.v1.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,7 +13,7 @@ namespace Library.WebApi.v1.Controllers
 {
     [ApiController]
     [Route("api/v1/")]
-    [AuthenticationFilter]
+    [Authorize]
     public class DialogsController : ControllerBase
     {
         private readonly IDialogService _dialogService;

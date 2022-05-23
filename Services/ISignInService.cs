@@ -1,12 +1,11 @@
 ﻿using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
+using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Authentication;
 using System.Threading.Tasks;
 
 namespace Library.Services
 {
-    public interface ISignInService<TRequest, TResponse> : IService
-        where TRequest : IRequest
-        where TResponse : IResponse
+    public interface ISignInService : IService
     {
-        Task<TResponse> SignIn(TRequest request);
+        Task<SignInResponse> SignIn(SignInRequest request);
     }
 }

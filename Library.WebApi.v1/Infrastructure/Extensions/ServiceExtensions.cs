@@ -1,8 +1,6 @@
 ﻿using Library.Contracts.Azure;
-using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Authentication;
-using Library.DummyServices;
+using Library.Entities;
 using Library.Services;
-using Library.WebApi.v1.Entities;
 using Library.WebApi.v1.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,17 +13,10 @@ namespace Library.WebApi.v1.Infrastructure.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void ConfigureIdentity(this IServiceCollection services)
-        {
-            IdentityBuilder builder = services.AddIdentityCore<User>();
-            builder.AddEntityFrameworkStores<LibraryDatabaseContext>();
-        }
-
         public static void ConfigureCoreServices(this IServiceCollection services)
         {
 #if !Dummy
-            //services.AddSingleton<IAuthenticationService<AuthenticateRequest, AuthenticateResponse>>
-            //    (new YouTubeAuthenticationService());
+
 #elif Dummy
             services.AddSingleton<ISignInService<SignInRequest, SignInResponse>>
                 (new YouTubeDummySignInService<SignInRequest, SignInResponse>());
