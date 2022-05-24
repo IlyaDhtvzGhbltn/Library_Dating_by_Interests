@@ -1,4 +1,5 @@
 ﻿using Library.Contracts;
+using Library.Contracts.MobileAndLibraryAPI.DTO;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Authentication;
 using Library.Contracts.YoutubeDTO;
@@ -32,16 +33,13 @@ namespace Library.Auth.Controllers
         private readonly IFactory<LibraryDatabaseContext> _dbFactory;
         private readonly IConfiguration _config;
 
-
         public AuthController(
             IFactory<LibraryDatabaseContext> factory, 
             IConfiguration config)
         {
             _dbFactory = factory;
             _config = config;
-
         }
-
 
         [HttpPost]
         [Route("auth/youtube")]
@@ -73,8 +71,8 @@ namespace Library.Auth.Controllers
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, typeof(ApiUser).ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Role, typeof(ApiUser).ToString()),
             };
 
             var token = new JwtSecurityToken(
@@ -95,7 +93,18 @@ namespace Library.Auth.Controllers
                 var user = new ApiUser()
                 {
                     YoutubeUserId = item.id,
-                    UserName = item.snippet.title
+                    UserName = item.snippet.title,
+                    About = item.snippet.description,
+                    Gender = (int)Gender.Unknown,
+                    Age = null, 
+                    DatingCriterias = new DatingCriteria() 
+                    {
+                        Gender = (int)Gender.Unknown,
+                        GeoRadiusKm = 15,
+                        IsGeo = false, 
+                        MinAge = 18, 
+                        MaxAge = 30, 
+                    }
                 };
 
                 var photos = new List<Photo>();

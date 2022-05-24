@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library.WebApi.v1.Infrastructure.Extensions
 {
-    public static class ConfigurationExtensions
+    public static class IConfigurationExtensions
     {
         public static AzureBlobStorageOptions GetAzureOptions(this IConfiguration config)
         {

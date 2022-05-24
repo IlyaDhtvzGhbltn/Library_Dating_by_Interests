@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.Entities.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    [Migration("20220524095557_initial")]
+    [Migration("20220524131314_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,32 @@ namespace Library.Entities.Migrations
                     b.HasIndex("SubscriptionsId");
 
                     b.ToTable("ApiUserYoutubeChanell");
+                });
+
+            modelBuilder.Entity("Library.Entities.DatingCriteria", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GeoRadiusKm")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsGeo")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxAge")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinAge")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DatingCriterias");
                 });
 
             modelBuilder.Entity("Library.Entities.Dialog", b =>
@@ -100,31 +126,6 @@ namespace Library.Entities.Migrations
                     b.HasIndex("ApiUserId");
 
                     b.ToTable("Photos");
-                });
-
-            modelBuilder.Entity("Library.Entities.Thumbnail", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ChanellId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Default")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("High")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Medium")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChanellId");
-
-                    b.ToTable("Thumbnails");
                 });
 
             modelBuilder.Entity("Library.Entities.YoutubeChanell", b =>
@@ -358,8 +359,24 @@ namespace Library.Entities.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ApiUser_DatingCriteria")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<string>("YoutubeUserId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("ApiUser_DatingCriteria")
+                        .IsUnique()
+                        .HasFilter("[ApiUser_DatingCriteria] IS NOT NULL");
 
                     b.HasDiscriminator().HasValue("ApiUser");
                 });
@@ -406,15 +423,6 @@ namespace Library.Entities.Migrations
                     b.HasOne("Library.Entities.ApiUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("ApiUserId");
-                });
-
-            modelBuilder.Entity("Library.Entities.Thumbnail", b =>
-                {
-                    b.HasOne("Library.Entities.YoutubeChanell", "Chanell")
-                        .WithMany()
-                        .HasForeignKey("ChanellId");
-
-                    b.Navigation("Chanell");
                 });
 
             modelBuilder.Entity("Library.Entities.YoutubeChanell", b =>
@@ -475,6 +483,20 @@ namespace Library.Entities.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Library.Entities.ApiUser", b =>
+                {
+                    b.HasOne("Library.Entities.DatingCriteria", "DatingCriterias")
+                        .WithOne("User")
+                        .HasForeignKey("Library.Entities.ApiUser", "ApiUser_DatingCriteria");
+
+                    b.Navigation("DatingCriterias");
+                });
+
+            modelBuilder.Entity("Library.Entities.DatingCriteria", b =>
+                {
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Library.Entities.Dialog", b =>

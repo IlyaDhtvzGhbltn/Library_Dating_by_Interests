@@ -6,15 +6,18 @@ using Library.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System;
 
 namespace Library.WebApi.v1.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Library.Entities.ApiUser")]
     [ApiController]
     [Route("api/v1")]
     public class UserController : ControllerBase
     {
         private readonly IUserDataService _userDataService;
+        private Guid _apiUserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
         public UserController(IUserDataService userDataService)
         {
@@ -23,30 +26,32 @@ namespace Library.WebApi.v1.Controllers
 
 
         [HttpGet]
-        [Route("profile/{internalId}")]
-        public async Task<IResponse> UserProfile([FromRoute] string internalId)
+        [Route("profile")]
+        public async Task<IResponse> UserProfile()
         {
-            UserProfile profile = await _userDataService.GetProfileByInternalId(internalId);
+            UserProfile profile = await _userDataService.GetProfileByInternalId(_apiUserId);
+            if (profile == null) 
+            {
+                Response.StatusCode = 404;
+                return null;
+            }
             var profileResponse = new UserProfileResponse(profile);
             return profileResponse;
         }
 
         [HttpPatch]
-        [Route("profile/{internalId}")]
-        public async Task ChangeUserProfile(
-            [FromRoute] string internalId, 
-            [FromBody]  ChangeUserProfileRequest request)
+        [Route("profile")]
+        public async Task ChangeUserProfile([FromBody]  ChangeUserProfileRequest request)
         {
-            await _userDataService.ChangeUserCommonInfo(internalId, request.CommonInfo);
-            await _userDataService.ChangeUserDatingCriteria(internalId, request.DatingCriteria);
+            await _userDataService.ChangeUserCommonInfo(_apiUserId, request.CommonInfo);
+            await _userDataService.ChangeUserDatingCriteria(_apiUserId, request.DatingCriteria);
         }
 
         [HttpDelete]
-        [Route("profile/{internalId}")]
-        public async Task DeleteProfile(
-            [FromRoute] string internalId) 
+        [Route("profile")]
+        public async Task DeleteProfile() 
         {
-            await _userDataService.DeleteProfile(internalId);
+            await _userDataService.DeleteProfile(_apiUserId);
             this.HttpContext.Response.StatusCode = 202;
         }
     }
