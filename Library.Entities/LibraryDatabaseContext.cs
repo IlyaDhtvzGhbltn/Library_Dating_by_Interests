@@ -14,7 +14,7 @@ namespace Library.Entities
         {}
 
         public DbSet<ApiUser> LibraryUsers { get; set; }
-        public DbSet<DatingCriteria> DatingCriterias { get; set; }
+        public DbSet<DatingCriteriaEntry> DatingCriterias { get; set; }
         public DbSet<YoutubeChanell> YoutubeChanells { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Dialog> Dialogs { get; set; }

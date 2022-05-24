@@ -11,9 +11,9 @@ using System;
 
 namespace Library.WebApi.v1.Controllers
 {
-    [Authorize(Roles = "Library.Entities.ApiUser")]
     [ApiController]
     [Route("api/v1")]
+    [Authorize(Roles = "Library.Entities.ApiUser")]
     public class UserController : ControllerBase
     {
         private readonly IUserDataService _userDataService;

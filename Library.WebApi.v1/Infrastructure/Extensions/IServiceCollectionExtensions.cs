@@ -22,7 +22,9 @@ namespace Library.WebApi.v1.Infrastructure.Extensions
         public static void ConfigureCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
 #if !Dummy
-            services.AddSingleton<IUserDataService>(new UserDataService(CreateFactoryDBContext(configuration)));
+            IFactory<LibraryDatabaseContext> factory = CreateFactoryDBContext(configuration);
+            services.AddSingleton<IUserDataService>(new UserDataService(factory));
+            services.AddSingleton<IDatingService>(new DatingService(factory));
 #elif Dummy
             services.AddSingleton<ISignInService<SignInRequest, SignInResponse>>
                 (new YouTubeDummySignInService<SignInRequest, SignInResponse>());

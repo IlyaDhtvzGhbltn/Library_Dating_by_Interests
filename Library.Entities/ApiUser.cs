@@ -16,7 +16,7 @@ namespace Library.Entities
         public int Gender { get; set; }
 
         [ForeignKey("ApiUser_DatingCriteria")]
-        public virtual DatingCriteria DatingCriterias { get; set; }
+        public virtual DatingCriteriaEntry DatingCriterias { get; set; }
 
         public virtual ICollection<Dialog> Dialogs { get; set; }
         public virtual ICollection<YoutubeChanell> Subscriptions { get; set; }

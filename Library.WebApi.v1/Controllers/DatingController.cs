@@ -6,16 +6,19 @@ using Library.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Library.WebApi.v1.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/v1/dating")]
+    [Authorize(Roles = "Library.Entities.ApiUser")]
     public class DatingController : ControllerBase
     {
-        private IDatingService _datingService { get; set; }
+        private readonly IDatingService _datingService;
+        private Guid _apiUserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
 
         public DatingController(IDatingService datingService)
         {
@@ -24,13 +27,11 @@ namespace Library.WebApi.v1.Controllers
 
 
         [HttpGet]
-        [Route("user")]
-        public async Task<IResponse> GetEligibleUsers(
-            [FromQuery] DatingCriteria criterias)
+        [Route("search")]
+        public async Task<IResponse> GetEligibleUsers([FromQuery]int skip = 0)
         {
-            Uri[] eligibleProfiles = await _datingService.EligibleProfiles(criterias);
-            var resp = new EligibleProfilesResponce(eligibleProfiles);
-            return resp;
+            DatingCriteria criteria = await _datingService.GetUserDatingCriteria(_apiUserId);
+            return null;
         }
 
 
