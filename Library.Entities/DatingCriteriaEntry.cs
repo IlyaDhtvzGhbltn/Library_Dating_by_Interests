@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Library.Entities
 {
-    public class DatingCriteria
+    public class DatingCriteriaEntry
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -38,3 +38,6 @@ DB Code-first refactoring and actualising
 
 007
 JWT implementation
+
+008
+Implement UserDataService working with DB

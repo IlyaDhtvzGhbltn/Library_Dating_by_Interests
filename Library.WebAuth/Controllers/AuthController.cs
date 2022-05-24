@@ -97,7 +97,7 @@ namespace Library.Auth.Controllers
                     About = item.snippet.description,
                     Gender = (int)Gender.Unknown,
                     Age = null, 
-                    DatingCriterias = new DatingCriteria() 
+                    DatingCriterias = new DatingCriteriaEntry() 
                     {
                         Gender = (int)Gender.Unknown,
                         GeoRadiusKm = 15,
