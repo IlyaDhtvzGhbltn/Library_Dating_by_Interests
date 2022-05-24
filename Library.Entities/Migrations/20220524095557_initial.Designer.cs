@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.Entities.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    [Migration("20220523184916_initial")]
+    [Migration("20220524095557_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -359,9 +359,6 @@ namespace Library.Entities.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("YoutubeUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("YoutubeUserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ApiUser");

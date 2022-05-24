@@ -9,8 +9,6 @@ namespace Library.Entities
     public class ApiUser : IdentityUser
     {
         public string YoutubeUserId { get; set; }
-        public string YoutubeUserName { get; set; }
-
 
         public virtual ICollection<Dialog> Dialogs { get; set; }
         public virtual ICollection<YoutubeChanell> Subscriptions { get; set; }

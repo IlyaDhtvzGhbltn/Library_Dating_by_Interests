@@ -359,9 +359,6 @@ namespace Library.Entities.Migrations
                     b.Property<string>("YoutubeUserId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("YoutubeUserName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("ApiUser");
                 });
 

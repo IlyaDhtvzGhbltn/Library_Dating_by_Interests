@@ -73,7 +73,8 @@ namespace Library.Auth.Controllers
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, user.YoutubeUserName)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, typeof(ApiUser).ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -94,7 +95,7 @@ namespace Library.Auth.Controllers
                 var user = new ApiUser()
                 {
                     YoutubeUserId = item.id,
-                    YoutubeUserName = item.snippet.title
+                    UserName = item.snippet.title
                 };
 
                 var photos = new List<Photo>();
@@ -112,7 +113,7 @@ namespace Library.Auth.Controllers
                 {
                     foreach (var youtubeItem in subscriptionResponce.items) 
                     {
-                        YoutubeChanell channell = await SaveChannellIfNotExist(youtubeItem);
+                        YoutubeChanell channell = await GetExistOrNewChannell(youtubeItem);
                         user.Subscriptions.Add(channell);
                     }
                 }
@@ -170,7 +171,7 @@ namespace Library.Auth.Controllers
             }
         }
 
-        private async Task<YoutubeChanell> SaveChannellIfNotExist(Item channel) 
+        private async Task<YoutubeChanell> GetExistOrNewChannell(Item channel) 
         {
             using (var context = _dbFactory.Create())
             {
@@ -182,19 +183,17 @@ namespace Library.Auth.Controllers
                 }
                 else 
                 {
-                    context.YoutubeChanells.Add(new YoutubeChanell() 
+                    return new YoutubeChanell()
                     {
-                        YoutubeId = channel.id, 
+                        YoutubeId = channel.id,
                         YoutubeDescription = channel.snippet.description,
                         YoutubeTitle = channel.snippet.title,
-                        Avatar = new Photo() 
+                        Avatar = new Photo()
                         {
-                            IsAvatar =true, 
-                            PhotoUrl = new Uri(channel.snippet.thumbnails.high.url) 
-                        }                 
-                    });
-                    context.SaveChanges();
-                    return await context.YoutubeChanells.FirstAsync(x => x.YoutubeId == channel.id);
+                            IsAvatar = true,
+                            PhotoUrl = new Uri(channel.snippet.thumbnails.high.url)
+                        }
+                    };
                 }
             }
         }
