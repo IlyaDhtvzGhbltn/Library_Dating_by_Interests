@@ -43,16 +43,30 @@ namespace Library.WebApi.v1.Controllers
         [Route("profile")]
         public async Task ChangeUserProfile([FromBody]  ChangeUserProfileRequest request)
         {
-            await _userDataService.ChangeUserCommonInfo(_apiUserId, request.CommonInfo);
-            await _userDataService.ChangeUserDatingCriteria(_apiUserId, request.DatingCriteria);
+            try
+            {
+                await _userDataService.ChangeUserCommonInfo(_apiUserId, request.CommonInfo);
+                await _userDataService.ChangeUserDatingCriteria(_apiUserId, request.DatingCriteria);
+            }
+            catch (NullReferenceException) 
+            {
+                Response.StatusCode = 404;
+            }
         }
 
         [HttpDelete]
         [Route("profile")]
         public async Task DeleteProfile() 
         {
-            await _userDataService.DeleteProfile(_apiUserId);
-            this.HttpContext.Response.StatusCode = 202;
+            try
+            {
+                await _userDataService.DeleteProfile(_apiUserId);
+                HttpContext.Response.StatusCode = 202;
+            }
+            catch (NullReferenceException)
+            {
+                Response.StatusCode = 404;
+            }
         }
     }
 }
