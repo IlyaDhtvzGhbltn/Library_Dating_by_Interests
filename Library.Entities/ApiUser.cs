@@ -4,14 +4,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Library.WebApi.v1.Entities
+namespace Library.Entities
 {
-    public class User : IdentityUser
+    public class ApiUser : IdentityUser
     {
-        public Guid InternalId { get; set; }
         public string YoutubeUserId { get; set; }
-        public string YoutubeUserName { get; set; }
 
+        public string About { get; set; }
+        public int? Age { get; set; }
+        [Required]
+        public int Gender { get; set; }
+
+        [ForeignKey("ApiUser_DatingCriteria")]
+        public virtual DatingCriteria DatingCriterias { get; set; }
 
         public virtual ICollection<Dialog> Dialogs { get; set; }
         public virtual ICollection<YoutubeChanell> Subscriptions { get; set; }

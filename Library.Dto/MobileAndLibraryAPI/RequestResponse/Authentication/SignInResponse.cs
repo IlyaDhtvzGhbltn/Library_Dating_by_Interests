@@ -6,7 +6,6 @@ namespace Library.Contracts.MobileAndLibraryAPI.RequestResponse.Authentication
 {
     public class SignInResponse : IResponse
     {
-        public string InternalToken { get; set; }
-        public string InternalUserId { get; set; }
+        public string InternalJwt { get; set; }
     }
 }

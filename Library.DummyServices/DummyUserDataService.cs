@@ -6,19 +6,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
 using Library.Contracts.MobileAndLibraryAPI.DTO.Dating;
+using System;
 
 namespace Library.DummyServices
 {
     public class DummyUserDataService : IUserDataService
     {
-        private Dictionary<string, UserProfile> _profileDB = new Dictionary<string, UserProfile>();
+        private Dictionary<Guid, UserProfile> _profileDB = new Dictionary<Guid, UserProfile>();
 
-        public async Task DeleteProfile(string internalId)
+        public async Task DeleteProfile(Guid internalId)
         {
             _profileDB.Remove(internalId);
         }
 
-        public async Task ChangeUserCommonInfo(string internalId, CommonInfo info)
+        public async Task ChangeUserCommonInfo(Guid internalId, CommonInfo info)
         {
             _profileDB[internalId].CommonInfo.About = info.About;
             _profileDB[internalId].CommonInfo.Age = info.Age;
@@ -26,7 +27,7 @@ namespace Library.DummyServices
             _profileDB[internalId].CommonInfo.Name = info.Name;
         }
 
-        public async Task ChangeUserDatingCriteria(string internalId, DatingCriteria criteria)
+        public async Task ChangeUserDatingCriteria(Guid internalId, DatingCriteria criteria)
         {
             _profileDB[internalId].DatingCriterias.Age = criteria.Age;
             _profileDB[internalId].DatingCriterias.Gender = criteria.Gender;
@@ -34,7 +35,7 @@ namespace Library.DummyServices
             _profileDB[internalId].DatingCriterias.Geo.RadiusKm = criteria.Geo.RadiusKm;
         }
 
-        public async Task<UserProfile> GetProfileByInternalId(string internalId)
+        public async Task<UserProfile> GetProfileByInternalId(Guid internalId)
         {
             UserProfile profile;
 

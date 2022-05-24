@@ -1,16 +1,15 @@
-using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Authentication;
-using Library.DummyServices;
 using Library.Services;
-using Library.WebApi.v1.Services;
-using Library.WebApi.v1.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Library.Contracts.Azure;
 using Microsoft.EntityFrameworkCore;
 using Library.WebApi.v1.Infrastructure.Extensions;
+using System;
+using Library.Contracts;
+using System.Text;
+using Library.Entities;
 
 namespace Library.WebApi.v1
 {
@@ -26,15 +25,12 @@ namespace Library.WebApi.v1
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureDBContext(Configuration);
 
-            services.AddDbContext<LibraryDatabaseContext>(options => 
-                options.UseSqlServer(Configuration.GetSection(AppSettings.ConnectionString).Value));
-
-            services.AddAuthentication();
-            services.ConfigureIdentity();
+            services.AddAndConfigureAuthentication(Configuration);
             services.AddAuthorization();
 
-            services.ConfigureCoreServices();
+            services.ConfigureCoreServices(Configuration);
             services.ConfigureAzure(Configuration.GetAzureOptions());
 
             services.AddSwaggerGen();
@@ -55,6 +51,7 @@ namespace Library.WebApi.v1
 
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

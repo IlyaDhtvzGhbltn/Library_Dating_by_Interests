@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Library.Contracts.MobileAndLibraryAPI.RequestResponse.Datings
 {
-    public class ReactionRequest : TrustedRequest
+    public class ReactionRequest : ApiRequest
     {
         public Reaction Reaction { get; set; }
     }

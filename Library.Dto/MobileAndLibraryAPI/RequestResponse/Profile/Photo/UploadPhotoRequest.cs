@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Library.Contracts.MobileAndLibraryAPI.RequestResponse.Profile.Photo
 {
-    public class UploadPhotoRequest : IRequest
+    public class UploadPhotoRequest : ApiRequest
     {
         public IFormFile File { get; set; }
     }
