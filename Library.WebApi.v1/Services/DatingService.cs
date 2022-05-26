@@ -5,6 +5,7 @@ using System;
 using DatingCriteria = Library.Contracts.MobileAndLibraryAPI.DTO.Profile.DatingCriteria;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library.WebApi.v1.Services
 {
@@ -17,15 +18,6 @@ namespace Library.WebApi.v1.Services
             _dbFactory = dbFactory;
         }
 
-        public Task<DatingCriteria> GetUserDatingCriteria(Guid apiUserId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string[]> EligibleProfiles(DatingCriteria criteria, int skip)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<DatingProfile> EligibleProfile(string apiUserId)
         {
@@ -35,6 +27,17 @@ namespace Library.WebApi.v1.Services
         public Task<bool> ProfileReaction(string senderInternalId, string profileId, Reaction reaction)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<string[]> EligibleProfilesId(Guid apiUserId, int skip)
+        {
+            using (var context = _dbFactory.Create())
+            {
+                var ress = context.ApiUsers.FromSqlRaw("GetUsersWithSameSubscriptions", apiUserId)
+                    .Select(x => x.Id)
+                    .ToArray();
+            }
+            return null;
         }
     }
 }

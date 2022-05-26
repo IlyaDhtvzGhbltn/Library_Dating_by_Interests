@@ -8,8 +8,7 @@ namespace Library.Services
 {
     public interface IDatingService : IService
     {
-        public Task<DatingCriteria> GetUserDatingCriteria(Guid apiUserId);
-        public Task<string[]> EligibleProfiles(DatingCriteria criteria, int skip);
+        public Task<string[]> EligibleProfilesId(Guid apiUserId, int skip);
         public Task<DatingProfile> EligibleProfile(string apiUserId);
         public Task<bool> ProfileReaction(string senderInternalId, string profileId, Reaction reaction);
     }

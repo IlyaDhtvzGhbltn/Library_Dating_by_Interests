@@ -15,11 +15,18 @@ namespace Library.Entities
         [Required]
         public int Gender { get; set; }
 
+        [Required]
+        public double Latitude { get; set; }
+        
+        [Required]
+        public double Longitude { get; set; }
+
         [ForeignKey("ApiUser_DatingCriteria")]
         public virtual DatingCriteriaEntry DatingCriterias { get; set; }
 
         public virtual ICollection<Dialog> Dialogs { get; set; }
-        public virtual ICollection<YoutubeChanell> Subscriptions { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
+
+        public virtual ICollection<ApiUser_YoutubeChannel> ApiUsers_YoutubeChannels { get; set; }
     }
 }

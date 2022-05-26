@@ -17,12 +17,14 @@ namespace Library.WebApi.v1.Controllers
     public class DatingController : ControllerBase
     {
         private readonly IDatingService _datingService;
+        private readonly IUserDataService _userDaraService;
         private Guid _apiUserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
 
-        public DatingController(IDatingService datingService)
+        public DatingController(IDatingService datingService, IUserDataService userDaraService)
         {
             _datingService = datingService;
+            _userDaraService = userDaraService;
         }
 
 
@@ -30,8 +32,8 @@ namespace Library.WebApi.v1.Controllers
         [Route("search")]
         public async Task<IResponse> GetEligibleUsers([FromQuery]int skip = 0)
         {
-            DatingCriteria criteria = await _datingService.GetUserDatingCriteria(_apiUserId);
-            return null;
+            string[] profilesId = await _datingService.EligibleProfilesId(_apiUserId, skip);
+            return new EligibleProfilesResponce(profilesId);
         }
 
 
@@ -48,21 +50,20 @@ namespace Library.WebApi.v1.Controllers
             }
             else 
             {
-                this.HttpContext.Response.StatusCode = 404;
+                HttpContext.Response.StatusCode = 404;
                 return null;
             }
         }
 
 
         [HttpPatch]
-        [Route("user/{senderInternalId}/reaction_on/{profileId}")]
+        [Route("reaction_on/{profileId}")]
         public async Task<IResponse> Reaction(
-            [FromRoute]string senderInternalId,
             [FromRoute]string profileId,
             [FromBody]ReactionRequest reactionRequest) 
         {
             Reaction reaction = reactionRequest.Reaction;
-            bool ok = await _datingService.ProfileReaction(senderInternalId, profileId, reaction);
+            bool ok = await _datingService.ProfileReaction(_apiUserId.ToString(), profileId, reaction);
             if (ok)
             {
                 HttpContext.Response.StatusCode = 200;

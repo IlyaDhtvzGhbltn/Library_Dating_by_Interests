@@ -6,10 +6,10 @@ namespace Library.Contracts.MobileAndLibraryAPI.RequestResponse.Datings
 {
     public class EligibleProfilesResponce : IResponse
     {
-        public EligibleProfilesResponce(Uri[] uris)
+        public EligibleProfilesResponce(string[] ids)
         {
-            UsersProfiles = uris;
+            IDs = ids;
         }
-        public Uri[] UsersProfiles { get; set; }
+        public string[] IDs { get; set; }
     }
 }

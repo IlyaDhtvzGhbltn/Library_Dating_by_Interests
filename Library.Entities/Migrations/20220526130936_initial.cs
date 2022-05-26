@@ -29,7 +29,7 @@ namespace Library.Entities.Migrations
                     MinAge = table.Column<int>(type: "int", nullable: false),
                     MaxAge = table.Column<int>(type: "int", nullable: false),
                     GeoRadiusKm = table.Column<int>(type: "int", nullable: false),
-                    IsGeo = table.Column<bool>(type: "bit", nullable: false),
+                    EnableGeoCriteria = table.Column<bool>(type: "bit", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -68,6 +68,8 @@ namespace Library.Entities.Migrations
                     About = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: true),
+                    Latitude = table.Column<double>(type: "float", nullable: true),
+                    Longitude = table.Column<double>(type: "float", nullable: true),
                     ApiUser_DatingCriteria = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -219,6 +221,33 @@ namespace Library.Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UsersRelations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiUser_Relation_Requester = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsRequesterPositiveReaction = table.Column<bool>(type: "bit", nullable: false),
+                    ApiUser_Relation_Responser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsResponserPositiveReaction = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsersRelations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UsersRelations_AspNetUsers_ApiUser_Relation_Requester",
+                        column: x => x.ApiUser_Relation_Requester,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UsersRelations_AspNetUsers_ApiUser_Relation_Responser",
+                        column: x => x.ApiUser_Relation_Responser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -267,33 +296,33 @@ namespace Library.Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApiUserYoutubeChanell",
+                name: "ApiUserYoutubeChannel",
                 columns: table => new
                 {
-                    LibraryUsersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SubscriptionsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ApiUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    YoutubeChannelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApiUserYoutubeChanell", x => new { x.LibraryUsersId, x.SubscriptionsId });
+                    table.PrimaryKey("PK_ApiUserYoutubeChannel", x => new { x.ApiUserId, x.YoutubeChannelId });
                     table.ForeignKey(
-                        name: "FK_ApiUserYoutubeChanell_AspNetUsers_LibraryUsersId",
-                        column: x => x.LibraryUsersId,
+                        name: "FK_ApiUserYoutubeChannel_AspNetUsers_ApiUserId",
+                        column: x => x.ApiUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApiUserYoutubeChanell_YoutubeChanells_SubscriptionsId",
-                        column: x => x.SubscriptionsId,
+                        name: "FK_ApiUserYoutubeChannel_YoutubeChanells_YoutubeChannelId",
+                        column: x => x.YoutubeChannelId,
                         principalTable: "YoutubeChanells",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApiUserYoutubeChanell_SubscriptionsId",
-                table: "ApiUserYoutubeChanell",
-                column: "SubscriptionsId");
+                name: "IX_ApiUserYoutubeChannel_YoutubeChannelId",
+                table: "ApiUserYoutubeChannel",
+                column: "YoutubeChannelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -362,6 +391,16 @@ namespace Library.Entities.Migrations
                 column: "ApiUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UsersRelations_ApiUser_Relation_Requester",
+                table: "UsersRelations",
+                column: "ApiUser_Relation_Requester");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersRelations_ApiUser_Relation_Responser",
+                table: "UsersRelations",
+                column: "ApiUser_Relation_Responser");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_YoutubeChanells_AvatarPhotoId",
                 table: "YoutubeChanells",
                 column: "AvatarPhotoId");
@@ -370,7 +409,7 @@ namespace Library.Entities.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApiUserYoutubeChanell");
+                name: "ApiUserYoutubeChannel");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -389,6 +428,9 @@ namespace Library.Entities.Migrations
 
             migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "UsersRelations");
 
             migrationBuilder.DropTable(
                 name: "YoutubeChanells");

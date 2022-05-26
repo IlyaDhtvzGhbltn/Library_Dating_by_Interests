@@ -12,6 +12,6 @@ namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dating
 
         public CommonInfo CommonInfo { get; set; }
         public Photo[] Photos { get; set; }
-        public YouTubeSubscription[] YouTubeSubscriptions { get; set; }
+        public YouTubeSubscription[] CommonYouTubeSubscriptions { get; set; }
     }
 }

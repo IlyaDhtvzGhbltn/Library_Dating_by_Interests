@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.Entities.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    [Migration("20220524131314_initial")]
+    [Migration("20220526130936_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,35 +21,35 @@ namespace Library.Entities.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ApiUserYoutubeChanell", b =>
+            modelBuilder.Entity("Library.Entities.ApiUser_YoutubeChannel", b =>
                 {
-                    b.Property<string>("LibraryUsersId")
+                    b.Property<string>("ApiUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("SubscriptionsId")
+                    b.Property<Guid>("YoutubeChannelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("LibraryUsersId", "SubscriptionsId");
+                    b.HasKey("ApiUserId", "YoutubeChannelId");
 
-                    b.HasIndex("SubscriptionsId");
+                    b.HasIndex("YoutubeChannelId");
 
-                    b.ToTable("ApiUserYoutubeChanell");
+                    b.ToTable("ApiUserYoutubeChannel");
                 });
 
-            modelBuilder.Entity("Library.Entities.DatingCriteria", b =>
+            modelBuilder.Entity("Library.Entities.DatingCriteriaEntry", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("EnableGeoCriteria")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<int>("GeoRadiusKm")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsGeo")
-                        .HasColumnType("bit");
 
                     b.Property<int>("MaxAge")
                         .HasColumnType("int");
@@ -126,6 +126,33 @@ namespace Library.Entities.Migrations
                     b.HasIndex("ApiUserId");
 
                     b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("Library.Entities.UsersRelation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApiUser_Relation_Requester")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApiUser_Relation_Responser")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsRequesterPositiveReaction")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsResponserPositiveReaction")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiUser_Relation_Requester");
+
+                    b.HasIndex("ApiUser_Relation_Responser");
+
+                    b.ToTable("UsersRelations");
                 });
 
             modelBuilder.Entity("Library.Entities.YoutubeChanell", b =>
@@ -371,6 +398,12 @@ namespace Library.Entities.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
                     b.Property<string>("YoutubeUserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -381,19 +414,23 @@ namespace Library.Entities.Migrations
                     b.HasDiscriminator().HasValue("ApiUser");
                 });
 
-            modelBuilder.Entity("ApiUserYoutubeChanell", b =>
+            modelBuilder.Entity("Library.Entities.ApiUser_YoutubeChannel", b =>
                 {
-                    b.HasOne("Library.Entities.ApiUser", null)
-                        .WithMany()
-                        .HasForeignKey("LibraryUsersId")
+                    b.HasOne("Library.Entities.ApiUser", "ApiUser")
+                        .WithMany("ApiUsers_YoutubeChannels")
+                        .HasForeignKey("ApiUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library.Entities.YoutubeChanell", null)
-                        .WithMany()
-                        .HasForeignKey("SubscriptionsId")
+                    b.HasOne("Library.Entities.YoutubeChanell", "YoutubeChanell")
+                        .WithMany("ApiUsers_YoutubeChannels")
+                        .HasForeignKey("YoutubeChannelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApiUser");
+
+                    b.Navigation("YoutubeChanell");
                 });
 
             modelBuilder.Entity("Library.Entities.Dialog", b =>
@@ -423,6 +460,21 @@ namespace Library.Entities.Migrations
                     b.HasOne("Library.Entities.ApiUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("ApiUserId");
+                });
+
+            modelBuilder.Entity("Library.Entities.UsersRelation", b =>
+                {
+                    b.HasOne("Library.Entities.ApiUser", "Requester")
+                        .WithMany()
+                        .HasForeignKey("ApiUser_Relation_Requester");
+
+                    b.HasOne("Library.Entities.ApiUser", "Responser")
+                        .WithMany()
+                        .HasForeignKey("ApiUser_Relation_Responser");
+
+                    b.Navigation("Requester");
+
+                    b.Navigation("Responser");
                 });
 
             modelBuilder.Entity("Library.Entities.YoutubeChanell", b =>
@@ -487,14 +539,14 @@ namespace Library.Entities.Migrations
 
             modelBuilder.Entity("Library.Entities.ApiUser", b =>
                 {
-                    b.HasOne("Library.Entities.DatingCriteria", "DatingCriterias")
+                    b.HasOne("Library.Entities.DatingCriteriaEntry", "DatingCriterias")
                         .WithOne("User")
                         .HasForeignKey("Library.Entities.ApiUser", "ApiUser_DatingCriteria");
 
                     b.Navigation("DatingCriterias");
                 });
 
-            modelBuilder.Entity("Library.Entities.DatingCriteria", b =>
+            modelBuilder.Entity("Library.Entities.DatingCriteriaEntry", b =>
                 {
                     b.Navigation("User");
                 });
@@ -504,8 +556,15 @@ namespace Library.Entities.Migrations
                     b.Navigation("Messages");
                 });
 
+            modelBuilder.Entity("Library.Entities.YoutubeChanell", b =>
+                {
+                    b.Navigation("ApiUsers_YoutubeChannels");
+                });
+
             modelBuilder.Entity("Library.Entities.ApiUser", b =>
                 {
+                    b.Navigation("ApiUsers_YoutubeChannels");
+
                     b.Navigation("Dialogs");
 
                     b.Navigation("Photos");
