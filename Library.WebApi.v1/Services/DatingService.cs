@@ -6,6 +6,7 @@ using DatingCriteria = Library.Contracts.MobileAndLibraryAPI.DTO.Profile.DatingC
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Library.WebApi.v1.Services
 {
@@ -31,13 +32,17 @@ namespace Library.WebApi.v1.Services
 
         public Task<string[]> EligibleProfilesId(Guid apiUserId, int skip)
         {
+            string command = $"EXEC GetUsersWithSameSubscription '{apiUserId}'";
             using (var context = _dbFactory.Create())
             {
-                var ress = context.ApiUsers.FromSqlRaw("GetUsersWithSameSubscriptions", apiUserId)
-                    .Select(x => x.Id)
-                    .ToArray();
+                var bindings = context.ApiUserYoutubeChannel.FromSqlRaw(command).ToList();
             }
             return null;
+        }
+
+        private class test 
+        {
+            public Guid id { get; set; }
         }
     }
 }
