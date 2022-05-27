@@ -2,6 +2,7 @@
 using Library.Contracts.MobileAndLibraryAPI.DTO.Profile;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Datings;
+using Library.Entities;
 using Library.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,29 +31,12 @@ namespace Library.WebApi.v1.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IResponse> GetEligibleUsers([FromQuery]int skip = 0)
+        public async Task<IResponse> Search([FromQuery]int skip = 0)
         {
-            string[] profilesId = await _datingService.EligibleProfilesId(_apiUserId, skip);
+            int apiUserKm = await _userDaraService.FindApiUserGeoKm(_apiUserId);
+            bool apiUserGeoEnabled = await _userDaraService.FindApiUserGeoEnabled(_apiUserId);
+            DatingProfile[] profilesId = await _datingService.EligibleProfiles(_apiUserId, skip, apiUserKm, apiUserGeoEnabled);
             return new EligibleProfilesResponce(profilesId);
-        }
-
-
-        [HttpGet]
-        [Route("user/{eligibleProfileId}")]
-        public async Task<IResponse> GetEligibleUser(
-            [FromRoute]  string eligibleProfileId)
-        {
-            DatingProfile profile = await _datingService.EligibleProfile(eligibleProfileId);
-            if (profile != null)
-            {
-                var resp = new EligibleProfileResponce(profile);
-                return resp;
-            }
-            else 
-            {
-                HttpContext.Response.StatusCode = 404;
-                return null;
-            }
         }
 
 

@@ -8,8 +8,7 @@ namespace Library.Services
 {
     public interface IDatingService : IService
     {
-        public Task<string[]> EligibleProfilesId(Guid apiUserId, int skip);
-        public Task<DatingProfile> EligibleProfile(string apiUserId);
+        public Task<DatingProfile[]> EligibleProfiles(Guid apiUserId, int skip, int geoKM, bool geoEnabled);
         public Task<bool> ProfileReaction(string senderInternalId, string profileId, Reaction reaction);
     }
 }

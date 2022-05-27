@@ -10,6 +10,5 @@ namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dating
         public Uri IconUrl { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public YouTubeSubscriptionsRelation Relation { get; set; }
     }
 }

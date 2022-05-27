@@ -24,7 +24,6 @@ namespace Library.WebApi.v1.Services
 
 
 
-
         public async Task<UserProfile> GetProfileByInternalId(Guid internalId)
         {
             using (var context = _dbFactory.Create())
@@ -121,7 +120,6 @@ namespace Library.WebApi.v1.Services
             }
         }
 
-
         public async Task DeleteProfile(Guid internalId)
         {
             using (var context = _dbFactory.Create())
@@ -158,6 +156,24 @@ namespace Library.WebApi.v1.Services
                         RadiusKm = user.DatingCriterias.GeoRadiusKm
                     },
                 };
+            }
+        }
+
+        public async Task<int> FindApiUserGeoKm(Guid apiUserId)
+        {
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser user = await this.FindUserById(context, apiUserId, "DatingCriterias");
+                return user.DatingCriterias.GeoRadiusKm;
+            }
+        }
+
+        public async Task<bool> FindApiUserGeoEnabled(Guid apiUserId)
+        {
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser user = await this.FindUserById(context, apiUserId, "DatingCriterias");
+                return user.DatingCriterias.EnableGeoCriteria;
             }
         }
     }
