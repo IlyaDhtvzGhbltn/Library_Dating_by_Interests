@@ -44,3 +44,6 @@ Implement UserDataService working with DB
 
 009
 Implement DatingService working with DB
+
+010
+Implement DialogService working with DB
