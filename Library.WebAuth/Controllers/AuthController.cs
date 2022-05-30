@@ -46,7 +46,7 @@ namespace Library.Auth.Controllers
         public async Task<SignInResponse> SignInViaYouTube(SignInRequest request)
         {
             YoutubeProfile profile = await GetYoutubeProfile(request.ExternalToken);
-            if (profile == null)
+            if (profile == null && profile.items == null)
             {
                 Response.StatusCode = 404;
                 return null;
@@ -56,7 +56,7 @@ namespace Library.Auth.Controllers
                 ApiUser user = await GetApiUser(profile.items[0].id);
                 if (user == null) 
                 {
-                    user = await RegisterProfileUser(profile, request.ExternalToken);
+                    user = await RegisterProfileUser(profile, request);
                 }
                 string internalJwt = GenerateJwt(user);
                 return new SignInResponse() { InternalJwt = internalJwt };
@@ -84,52 +84,60 @@ namespace Library.Auth.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private async Task<ApiUser> RegisterProfileUser(YoutubeProfile profile, string externalToken)
+        private async Task<ApiUser> RegisterProfileUser(YoutubeProfile profile, SignInRequest request)
         {
             using (var context = _dbFactory.Create())
             {
-                Item item = profile.items[0];
+                ApiUser apiUser = await SaveApiUser(context, request, profile.items[0]);
+                List<YoutubeChanell> channels = await SaveYoutubeChannels(context, request.ExternalToken);
 
-                var user = new ApiUser()
-                {
-                    YoutubeUserId = item.id,
-                    UserName = item.snippet.title,
-                    About = item.snippet.description,
-                    Gender = (int)Gender.Unknown,
-                    Age = null, 
-                    DatingCriterias = new DatingCriteriaEntry() 
-                    {
-                        Gender = (int)Gender.Unknown,
-                        GeoRadiusKm = 15,
-                        IsGeo = false, 
-                        MinAge = 18, 
-                        MaxAge = 30, 
-                    }
-                };
-
-                var photos = new List<Photo>();
-                photos.Add(new Photo() 
-                {
-                    IsAvatar = true,
-                    PhotoId = Guid.NewGuid(),
-                    PhotoUrl = new Uri(item.snippet.thumbnails.high.url)
-                });
-
-                user.Photos = photos;
-                ICollection<YoutubeSubscriptionsResponse> userSubs = await GetUserSubscriptions(externalToken);
-                user.Subscriptions = new List<YoutubeChanell>();
-                foreach (var subscriptionResponce in userSubs) 
-                {
-                    foreach (var youtubeItem in subscriptionResponce.items) 
-                    {
-                        YoutubeChanell channell = await GetExistOrNewChannell(youtubeItem);
-                        user.Subscriptions.Add(channell);
-                    }
-                }
-                context.LibraryUsers.Add(user);
-                context.SaveChanges();
-                return context.LibraryUsers.First(x => x.YoutubeUserId == item.id);
+                await SaveMaping(context, apiUser, channels);
+                return apiUser;
             }
+        }
+
+        private async Task SaveMaping(LibraryDatabaseContext context, ApiUser apiUser, List<YoutubeChanell> channels)
+        {
+            var apiUsers_YoutubeChannels = new List<ApiUser_YoutubeChannel>();
+            foreach (var channel in channels) 
+            {
+                apiUsers_YoutubeChannels.Add(new ApiUser_YoutubeChannel() 
+                {
+                    ApiUser = apiUser, 
+                    ApiUserId = apiUser.Id, 
+                    YoutubeChanell = channel, 
+                    YoutubeChannelId = channel.Id
+                });
+            }
+            context.ApiUserYoutubeChannel.AddRange(apiUsers_YoutubeChannels);
+            context.SaveChanges();
+        }
+
+        private async Task<List<YoutubeChanell>> SaveYoutubeChannels(LibraryDatabaseContext context, string externalToken)
+        {
+            var subsList = await GetUserSubscriptions(externalToken);
+            var channelsUserWatching = new List<YoutubeChanell>();
+            foreach (var listItem in subsList)
+            {
+                foreach (var youtubeItem in listItem.items)
+                {
+                    YoutubeChanell channell = await FindChannel(context, youtubeItem);
+                    if (channell == null)
+                    {
+                        channell = await CreateChannel(context, youtubeItem);
+                    }
+                    channelsUserWatching.Add(channell);
+                }
+            }
+            return channelsUserWatching;
+        }
+
+        private async Task<ApiUser> SaveApiUser(LibraryDatabaseContext context, SignInRequest request, Item item)
+        {
+            ApiUser user = CreateApiUserModel(request, item);
+            context.ApiUsers.Add(user);
+            context.SaveChanges();
+            return await context.ApiUsers.FirstAsync(x => x.YoutubeUserId == item.id);
         }
 
         private async Task<ICollection<YoutubeSubscriptionsResponse>> GetUserSubscriptions(string externalToken)
@@ -155,7 +163,7 @@ namespace Library.Auth.Controllers
         {
             using (var context = _dbFactory.Create()) 
             {
-                ApiUser user = await context.LibraryUsers.FirstOrDefaultAsync(x => x.YoutubeUserId == id);
+                ApiUser user = await context.ApiUsers.FirstOrDefaultAsync(x => x.YoutubeUserId == id);
                 return user;
             }
         }
@@ -167,7 +175,67 @@ namespace Library.Auth.Controllers
             return profile;
         }
 
-        private async Task<T> GetResponce<T>(string url) 
+        private async Task<YoutubeChanell> CreateChannel(LibraryDatabaseContext context, Item item) 
+        {
+            var channel = new YoutubeChanell()
+            {
+                YoutubeId = item.id,
+                YoutubeDescription = item.snippet.description,
+                YoutubeTitle = item.snippet.title,
+                Avatar = new Photo()
+                {
+                    IsAvatar = true,
+                    PhotoUrl = new Uri(item.snippet.thumbnails.high.url)
+                }
+            };
+
+            context.YoutubeChanells.Add(channel);
+            context.SaveChanges();
+            var savedChannel = await context.YoutubeChanells.FirstAsync(x => x.YoutubeId == item.id);
+            return savedChannel;
+        }
+
+        private async Task<YoutubeChanell> FindChannel(LibraryDatabaseContext context, Item channel) 
+        {
+                var channell = await context.YoutubeChanells
+                    .FirstOrDefaultAsync(x => x.YoutubeId == channel.id);
+                return channell;
+        }
+
+        private ApiUser CreateApiUserModel(SignInRequest request, Item item) 
+        {
+            var user = new ApiUser()
+            {
+                YoutubeUserId = item.id,
+                UserName = item.snippet.title,
+                About = item.snippet.description,
+                Gender = (int)Gender.Unknown,
+                Age = 18,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude,
+                DatingCriterias = new DatingCriteriaEntry()
+                {
+                    Gender = (int)Gender.Unknown,
+                    GeoRadiusKm = 15,
+                    EnableGeoCriteria = false,
+                    MinAge = 18,
+                    MaxAge = 30,
+                }
+            };
+
+            var photos = new List<Photo>();
+            photos.Add(new Photo()
+            {
+                IsAvatar = true,
+                PhotoId = Guid.NewGuid(),
+                PhotoUrl = new Uri(item.snippet.thumbnails.high.url)
+            });
+
+            user.Photos = photos;
+            return user;
+        }
+
+        private async Task<T> GetResponce<T>(string url)
         {
             using (var _client = new HttpClient())
             {
@@ -176,33 +244,6 @@ namespace Library.Auth.Controllers
                     string responseBody = await response.Content.ReadAsStringAsync();
                     T obj = JsonConvert.DeserializeObject<T>(responseBody);
                     return obj;
-                }
-            }
-        }
-
-        private async Task<YoutubeChanell> GetExistOrNewChannell(Item channel) 
-        {
-            using (var context = _dbFactory.Create())
-            {
-                var existedChannel = await context.YoutubeChanells
-                    .FirstOrDefaultAsync(x => x.YoutubeId == channel.id);
-                if (existedChannel != null)
-                {
-                    return existedChannel;
-                }
-                else 
-                {
-                    return new YoutubeChanell()
-                    {
-                        YoutubeId = channel.id,
-                        YoutubeDescription = channel.snippet.description,
-                        YoutubeTitle = channel.snippet.title,
-                        Avatar = new Photo()
-                        {
-                            IsAvatar = true,
-                            PhotoUrl = new Uri(channel.snippet.thumbnails.high.url)
-                        }
-                    };
                 }
             }
         }

@@ -22,15 +22,19 @@ namespace Library.WebApi.v1.Services
             _dbFactory = dbFactory;
         }
 
+
+
         public async Task<UserProfile> GetProfileByInternalId(Guid internalId)
         {
             using (var context = _dbFactory.Create())
             {
                 string id = internalId.ToString();
-                ApiUser user = await context.LibraryUsers
+                ApiUser user = await context.ApiUsers
                     .Include(x => x.DatingCriterias)
                     .Include(x => x.Photos)
-                    .Include(x => x.Subscriptions).ThenInclude(y => y.Avatar)
+                    .Include(x => x.ApiUsers_YoutubeChannels)
+                        .ThenInclude(y => y.YoutubeChanell)
+                        .ThenInclude(y => y.Avatar)
                     .FirstOrDefaultAsync(x => x.Id == id);
                 if (user == null)
                 {
@@ -67,10 +71,10 @@ namespace Library.WebApi.v1.Services
                             },
                             Geo = new GeoCriteria()
                             {
-                                All = user.DatingCriterias.IsGeo,
+                                All = user.DatingCriterias.EnableGeoCriteria,
                                 RadiusKm = user.DatingCriterias.GeoRadiusKm
                             },
-                            MySubscriptions = user.Subscriptions.Select(x => x.Avatar.PhotoUrl.ToString()).ToArray()
+                            MySubscriptions = user.ApiUsers_YoutubeChannels.Select(x => x.YoutubeChanell.Avatar.PhotoUrl.ToString()).ToArray()
                         }
                     };
                 }
@@ -81,13 +85,12 @@ namespace Library.WebApi.v1.Services
         {
             using (var context = _dbFactory.Create())
             {
-                bool userExist = await this.ApiUserExist(context, internalId);
-                if (!userExist) 
+                ApiUser user = await this.FindUserById(context, internalId);
+                if (user == null) 
                 {
                     throw new NullReferenceException();
                 }
 
-                ApiUser user = await this.FindUserById(context, internalId);
                 user.UserName = info.Name;
                 user.About = info.About;
                 user.Age = info.Age;
@@ -101,24 +104,21 @@ namespace Library.WebApi.v1.Services
         {
             using (var context = _dbFactory.Create())
             {
-                bool userExist = await this.ApiUserExist(context, internalId);
-                if (!userExist)
+                var user = await this.FindUserById(context, internalId, "DatingCriterias");
+                if (user == null)
                 {
                     throw new NullReferenceException();
                 }
 
-                ApiUser user = await this.FindUserById(context, internalId, "DatingCriterias");
-
                 user.DatingCriterias.Gender = (int)criteria.Gender.Gender;
                 user.DatingCriterias.GeoRadiusKm = criteria.Geo.RadiusKm;
-                user.DatingCriterias.IsGeo = criteria.Geo.All;
+                user.DatingCriterias.EnableGeoCriteria = criteria.Geo.All;
                 user.DatingCriterias.MaxAge = criteria.Age.MaxAge;
                 user.DatingCriterias.MinAge = criteria.Age.MinAge;
 
                 await context.SaveChangesAsync();
             }
         }
-
 
         public async Task DeleteProfile(Guid internalId)
         {
@@ -130,9 +130,50 @@ namespace Library.WebApi.v1.Services
                     throw new NullReferenceException(); 
                 }
 
-                context.LibraryUsers.Remove(user);
+                context.ApiUsers.Remove(user);
                 context.Photos.RemoveRange(user.Photos);
                 await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<DatingCriteria> GetUserDatingCriteria(Guid apiUserId)
+        {
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser user = await this.FindUserById(context, apiUserId, "DatingCriterias");
+                return new DatingCriteria()
+                {
+                    Age = new AgeCriteria(
+                        minAge: user.DatingCriterias.MinAge,
+                        maxAge: user.DatingCriterias.MaxAge),
+                    Gender = new GenderCriteria()
+                    {
+                        Gender = (Gender)user.DatingCriterias.Gender
+                    },
+                    Geo = new GeoCriteria()
+                    {
+                        All = user.DatingCriterias.EnableGeoCriteria,
+                        RadiusKm = user.DatingCriterias.GeoRadiusKm
+                    },
+                };
+            }
+        }
+
+        public async Task<int> FindApiUserGeoKm(Guid apiUserId)
+        {
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser user = await this.FindUserById(context, apiUserId, "DatingCriterias");
+                return user.DatingCriterias.GeoRadiusKm;
+            }
+        }
+
+        public async Task<bool> FindApiUserGeoEnabled(Guid apiUserId)
+        {
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser user = await this.FindUserById(context, apiUserId, "DatingCriterias");
+                return user.DatingCriterias.EnableGeoCriteria;
             }
         }
     }

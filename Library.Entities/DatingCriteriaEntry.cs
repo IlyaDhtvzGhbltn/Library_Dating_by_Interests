@@ -21,7 +21,7 @@ namespace Library.Entities
         [Range(2, 2000)]
         public int GeoRadiusKm { get; set; }
 
-        public bool IsGeo { get; set; }
+        public bool EnableGeoCriteria { get; set; }
 
         [Range(0, 2)]
         public int Gender { get; set; }

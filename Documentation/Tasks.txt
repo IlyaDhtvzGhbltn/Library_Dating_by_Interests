@@ -41,3 +41,6 @@ JWT implementation
 
 008
 Implement UserDataService working with DB
+
+009
+Implement DatingService working with DB

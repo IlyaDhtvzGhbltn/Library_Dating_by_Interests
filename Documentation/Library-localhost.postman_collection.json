@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "274941c4-b8bb-4c2c-b77a-6f2a2de69d4c",
 		"name": "Library-localhost",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4507102"
 	},
 	"item": [
 		{
@@ -11,21 +12,20 @@
 				{
 					"name": "Open Profile Info",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImZmNzFjNGQ3LTk0NzQtNDljNS1hM2MxLTJkMGMyNDY4NzIwZiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkxpYnJhcnkuRW50aXRpZXMuQXBpVXNlciIsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzgzLyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzgzLyJ9.gfKzi6XZk0DufY8--6GSUor6Z6aGmPear4-nKr9_a3g",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "InternalBearerToken",
-								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
-								"type": "text"
-							},
-							{
-								"key": "InternalUserId",
-								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
-							"raw": "https://localhost:44383/api/v1/profile/4e09fa0c",
+							"raw": "https://localhost:44383/api/v1/profile",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -34,8 +34,7 @@
 							"path": [
 								"api",
 								"v1",
-								"profile",
-								"4e09fa0c"
+								"profile"
 							]
 						}
 					},
@@ -44,22 +43,21 @@
 				{
 					"name": "Change Profile Info",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImU1NmRlOThiLWUzMTItNDdmNi04NDM3LWFjMmMxYTllNzlkMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkxpYnJhcnkuRW50aXRpZXMuQXBpVXNlciIsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzgzLyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzgzLyJ9.FrPaGJlE2r5UeYo148bf_asgve_VMLFvoYg-ScCPQFA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
-						"header": [
-							{
-								"key": "InternalBearerToken",
-								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
-								"type": "text"
-							},
-							{
-								"key": "InternalUserId",
-								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"CommonInfo\" : \r\n    {\r\n        \"Name\" : \"Ivan333\",\r\n        \"About\" : \"Hello Library!\",\r\n        \"Age\" : 28,\r\n        \"Gender\" : 0\r\n    },\r\n    \"DatingCriteria\" : \r\n    {\r\n        \"Age\" : \r\n        {\r\n            \"MinAge\" : 16,\r\n            \"MaxAge\" : 27\r\n        },\r\n        \"Geo\" : \r\n        {\r\n            \"RadiusKm\" : 100,\r\n            \"All\" : false\r\n        },\r\n        \"Gender\" : \r\n        {\r\n            \"Gender\" : 1\r\n        },\r\n        \"MySubscriptions\":[\"1\", \"2\"]\r\n    }\r\n}",
+							"raw": "{\r\n    \"CommonInfo\" : \r\n    {\r\n        \"Name\" : \"Илья ABS\",\r\n        \"About\" : \"Hello Library  cc!\",\r\n        \"Age\" : 33,\r\n        \"Gender\" : 0\r\n    },\r\n    \"DatingCriteria\" : \r\n    {\r\n        \"Age\" : \r\n        {\r\n            \"MinAge\" : -5,\r\n            \"MaxAge\" : 27\r\n        },\r\n        \"Geo\" : \r\n        {\r\n            \"RadiusKm\" : 100,\r\n            \"All\" : true\r\n        },\r\n        \"Gender\" : \r\n        {\r\n            \"Gender\" : 0\r\n        }\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -67,7 +65,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44383/api/v1/profile/4e09fa0c",
+							"raw": "https://localhost:44383/api/v1/profile",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -76,8 +74,7 @@
 							"path": [
 								"api",
 								"v1",
-								"profile",
-								"4e09fa0c"
+								"profile"
 							]
 						}
 					},
@@ -86,19 +83,18 @@
 				{
 					"name": "Delete Profile",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImU1NmRlOThiLWUzMTItNDdmNi04NDM3LWFjMmMxYTllNzlkMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkxpYnJhcnkuRW50aXRpZXMuQXBpVXNlciIsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzgzLyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzgzLyJ9.FrPaGJlE2r5UeYo148bf_asgve_VMLFvoYg-ScCPQFA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "InternalBearerToken",
-								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
-								"type": "text"
-							},
-							{
-								"key": "InternalUserId",
-								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -109,7 +105,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44383/api/v1/profile/4e09fa0c",
+							"raw": "https://localhost:44383/api/v1/profile",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -118,21 +114,20 @@
 							"path": [
 								"api",
 								"v1",
-								"profile",
-								"4e09fa0c"
+								"profile"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Registration via youtube",
+					"name": "SIgnIn via youtube",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{}",
+							"raw": "{\r\n    \"ExternalToken\":\"ya29.a0ARrdaM9rtlDwILc7HfHOdQIu_1Iak8JOfAMOKBdMpjMk8Hzc3uq0zxuhlbrh0CjDgBB6DFuB8yvyh8m4zvSLCk88ffo3Db5bovFO09U4wKcC2f8JgeJ2xLT9KbTo6Pg4l8N0KlwglJb1sLo2qBWYslOa_QLh\",\r\n    \"Latitude\": 52.214898,\r\n    \"Longitude\": -8.991404\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -140,15 +135,13 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44383/api/v1/auth/youtube",
+							"raw": "https://localhost:44326/auth/youtube",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
-							"port": "44383",
+							"port": "44326",
 							"path": [
-								"api",
-								"v1",
 								"auth",
 								"youtube"
 							]
@@ -164,21 +157,20 @@
 				{
 					"name": "All Eligible Users",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjcxOGU3ZjEwLTNiMmMtNDU3Ni1iNmUyLWY3YTMxN2EyZDJjZiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkxpYnJhcnkuRW50aXRpZXMuQXBpVXNlciIsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzgzLyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzgzLyJ9.2wM0L_RVpjxxv5MPnbEPBMlMYGLOyjleX31HXA_L2Ho",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "InternalBearerToken",
-								"value": "4acf214e-8136-4c5c-932b-98c4a063946f",
-								"type": "text"
-							},
-							{
-								"key": "InternalUserId",
-								"value": "ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
-							"raw": "https://localhost:44383/api/v1/dating/user?Age.MinAge=18&Age.MaxAge=25&Geo.RadiusKm=200&Geo.All=false&Gender.Gender=1&MySubscriptions=UCSJ4gkVC6NrvII8umztf0Ow&MySubscriptions=UCuw1VDsmOWOldKGLYq6AkVg",
+							"raw": "https://localhost:44383/api/v1/dating/search",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -188,37 +180,7 @@
 								"api",
 								"v1",
 								"dating",
-								"user"
-							],
-							"query": [
-								{
-									"key": "Age.MinAge",
-									"value": "18"
-								},
-								{
-									"key": "Age.MaxAge",
-									"value": "25"
-								},
-								{
-									"key": "Geo.RadiusKm",
-									"value": "200"
-								},
-								{
-									"key": "Geo.All",
-									"value": "false"
-								},
-								{
-									"key": "Gender.Gender",
-									"value": "1"
-								},
-								{
-									"key": "MySubscriptions",
-									"value": "UCSJ4gkVC6NrvII8umztf0Ow"
-								},
-								{
-									"key": "MySubscriptions",
-									"value": "UCuw1VDsmOWOldKGLYq6AkVg"
-								}
+								"search"
 							]
 						}
 					},
@@ -534,7 +496,7 @@
 							]
 						},
 						"url": {
-							"raw": "https://localhost:44383/api/v1/user/ae5f1d82/uploadphoto",
+							"raw": "https://localhost:44383/api/v1/user/ce5aed38-feb8-4e91-ac5f-e9771c1d309f/uploadphoto",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -544,7 +506,7 @@
 								"api",
 								"v1",
 								"user",
-								"ae5f1d82",
+								"ce5aed38-feb8-4e91-ac5f-e9771c1d309f",
 								"uploadphoto"
 							]
 						}
@@ -568,7 +530,7 @@
 							}
 						],
 						"url": {
-							"raw": "https://localhost:44383/api/v1/user/ae5f1d82/photo/83ed1848-7fb9-4ae4-878a-7196745ddf59",
+							"raw": "https://localhost:44383/api/v1/user/4acf214e-8136-4c5c-932b-98c4a063946f/photo/d1b7b173-c48a-44e0-9690-48dcc106d496",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -578,9 +540,9 @@
 								"api",
 								"v1",
 								"user",
-								"ae5f1d82",
+								"4acf214e-8136-4c5c-932b-98c4a063946f",
 								"photo",
-								"83ed1848-7fb9-4ae4-878a-7196745ddf59"
+								"d1b7b173-c48a-44e0-9690-48dcc106d496"
 							]
 						}
 					},
@@ -616,6 +578,143 @@
 								"ae5f1d82",
 								"setavatarphoto",
 								"83ed1848-7fb9-4ae4-878a-7196745ddf59"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Youtube Api",
+			"item": [
+				{
+					"name": "1-Get_ProfileInfo",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.googleapis.com/youtube/v3/channels?access_token=ya29.a0ARrdaM8YEQh_WeiHL0zWBawBkUyz4xt3tgZm1cv21aKMnfZ78p-4hr1yt2qR22kn4aqaS9vGl30_sa3KoNucTocL2_91OkvZS-3Ojl9CyZbAw6W7HE0TSmpzWrE5ae51tnzjGluUlK5ayuCRu5TJuPzOQoF3&part=snippet&mine=true",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"youtube",
+								"v3",
+								"channels"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "ya29.a0ARrdaM8YEQh_WeiHL0zWBawBkUyz4xt3tgZm1cv21aKMnfZ78p-4hr1yt2qR22kn4aqaS9vGl30_sa3KoNucTocL2_91OkvZS-3Ojl9CyZbAw6W7HE0TSmpzWrE5ae51tnzjGluUlK5ayuCRu5TJuPzOQoF3"
+								},
+								{
+									"key": "part",
+									"value": "snippet"
+								},
+								{
+									"key": "mine",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2-Get_Subs",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.googleapis.com/youtube/v3/subscriptions?access_token=ya29.a0ARrdaM_-SY3cbD2x8erCW0IY-FsXYprKx7Wvt60msQV0rUg1WN1ve597C9_MK7Rh5ueFOYH34E9xwCMO0SWYGM-7jxGXgf6lJDZPPfoOnS0aW64vx4u318noksd75HrieHtexuLwtsqb2aXLkCn_06K39XOx&part=snippet&mine=true&maxResults=50",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"youtube",
+								"v3",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "ya29.a0ARrdaM_-SY3cbD2x8erCW0IY-FsXYprKx7Wvt60msQV0rUg1WN1ve597C9_MK7Rh5ueFOYH34E9xwCMO0SWYGM-7jxGXgf6lJDZPPfoOnS0aW64vx4u318noksd75HrieHtexuLwtsqb2aXLkCn_06K39XOx"
+								},
+								{
+									"key": "part",
+									"value": "snippet"
+								},
+								{
+									"key": "mine",
+									"value": "true"
+								},
+								{
+									"key": "maxResults",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3-Get_Subs_Next_",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.googleapis.com/youtube/v3/subscriptions?access_token=ya29.a0ARrdaM_-SY3cbD2x8erCW0IY-FsXYprKx7Wvt60msQV0rUg1WN1ve597C9_MK7Rh5ueFOYH34E9xwCMO0SWYGM-7jxGXgf6lJDZPPfoOnS0aW64vx4u318noksd75HrieHtexuLwtsqb2aXLkCn_06K39XOx&part=snippet&mine=true&maxResults=50&pageToken=CDIQAA",
+							"protocol": "https",
+							"host": [
+								"www",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"youtube",
+								"v3",
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "ya29.a0ARrdaM_-SY3cbD2x8erCW0IY-FsXYprKx7Wvt60msQV0rUg1WN1ve597C9_MK7Rh5ueFOYH34E9xwCMO0SWYGM-7jxGXgf6lJDZPPfoOnS0aW64vx4u318noksd75HrieHtexuLwtsqb2aXLkCn_06K39XOx"
+								},
+								{
+									"key": "part",
+									"value": "snippet"
+								},
+								{
+									"key": "mine",
+									"value": "true"
+								},
+								{
+									"key": "maxResults",
+									"value": "50"
+								},
+								{
+									"key": "pageToken",
+									"value": "CDIQAA"
+								}
 							]
 						}
 					},

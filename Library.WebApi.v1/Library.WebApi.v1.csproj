@@ -34,7 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Library.Dto\Library.Contracts.csproj" />
     <ProjectReference Include="..\Library.DummyServices\Library.DummyServices.csproj" />
-    <ProjectReference Include="..\Library.Entities\Library.Entities.csproj" />
     <ProjectReference Include="..\Services\Library.Services.csproj" />
   </ItemGroup>
 

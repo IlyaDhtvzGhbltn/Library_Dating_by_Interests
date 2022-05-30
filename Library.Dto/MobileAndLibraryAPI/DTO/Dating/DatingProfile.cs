@@ -1,4 +1,5 @@
 ﻿using Library.Contracts.MobileAndLibraryAPI.DTO.Profile;
+using System;
 using System.Collections.Generic;
 
 namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dating
@@ -10,8 +11,9 @@ namespace Library.Contracts.MobileAndLibraryAPI.DTO.Dating
             CommonInfo = new CommonInfo();
         }
 
+        public Guid ApiUserId { get; set; }
         public CommonInfo CommonInfo { get; set; }
         public Photo[] Photos { get; set; }
-        public YouTubeSubscription[] YouTubeSubscriptions { get; set; }
+        public YouTubeSubscription[] CommonYouTubeSubscriptions { get; set; }
     }
 }

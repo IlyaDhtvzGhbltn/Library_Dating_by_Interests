@@ -17,6 +17,6 @@ namespace Library.Entities
         public string YoutubeDescription { get; set; }
 
         public virtual Photo Avatar { get; set; }
-        public virtual ICollection<ApiUser> LibraryUsers { get; set; }
+        public virtual ICollection<ApiUser_YoutubeChannel> ApiUsers_YoutubeChannels { get; set; }
     }
 }

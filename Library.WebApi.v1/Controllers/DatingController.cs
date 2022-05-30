@@ -2,6 +2,7 @@
 using Library.Contracts.MobileAndLibraryAPI.DTO.Profile;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse;
 using Library.Contracts.MobileAndLibraryAPI.RequestResponse.Datings;
+using Library.Entities;
 using Library.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,52 +18,36 @@ namespace Library.WebApi.v1.Controllers
     public class DatingController : ControllerBase
     {
         private readonly IDatingService _datingService;
+        private readonly IUserDataService _userDaraService;
         private Guid _apiUserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
 
-        public DatingController(IDatingService datingService)
+        public DatingController(IDatingService datingService, IUserDataService userDaraService)
         {
             _datingService = datingService;
+            _userDaraService = userDaraService;
         }
 
 
         [HttpGet]
         [Route("search")]
-        public async Task<IResponse> GetEligibleUsers([FromQuery]int skip = 0)
+        public async Task<IResponse> Search([FromQuery]int skip = 0)
         {
-            DatingCriteria criteria = await _datingService.GetUserDatingCriteria(_apiUserId);
-            return null;
-        }
-
-
-        [HttpGet]
-        [Route("user/{eligibleProfileId}")]
-        public async Task<IResponse> GetEligibleUser(
-            [FromRoute]  string eligibleProfileId)
-        {
-            DatingProfile profile = await _datingService.EligibleProfile(eligibleProfileId);
-            if (profile != null)
-            {
-                var resp = new EligibleProfileResponce(profile);
-                return resp;
-            }
-            else 
-            {
-                this.HttpContext.Response.StatusCode = 404;
-                return null;
-            }
+            int apiUserKm = await _userDaraService.FindApiUserGeoKm(_apiUserId);
+            bool apiUserGeoEnabled = await _userDaraService.FindApiUserGeoEnabled(_apiUserId);
+            DatingProfile[] profilesId = await _datingService.EligibleProfiles(_apiUserId, skip, apiUserKm, apiUserGeoEnabled);
+            return new EligibleProfilesResponce(profilesId);
         }
 
 
         [HttpPatch]
-        [Route("user/{senderInternalId}/reaction_on/{profileId}")]
+        [Route("reaction_on/{profileId}")]
         public async Task<IResponse> Reaction(
-            [FromRoute]string senderInternalId,
             [FromRoute]string profileId,
             [FromBody]ReactionRequest reactionRequest) 
         {
             Reaction reaction = reactionRequest.Reaction;
-            bool ok = await _datingService.ProfileReaction(senderInternalId, profileId, reaction);
+            bool ok = await _datingService.ProfileReaction(_apiUserId.ToString(), profileId, reaction);
             if (ok)
             {
                 HttpContext.Response.StatusCode = 200;
