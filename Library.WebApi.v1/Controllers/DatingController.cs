@@ -31,7 +31,7 @@ namespace Library.WebApi.v1.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IResponse> Search([FromQuery]int skip = 0)
+        public async Task<IResponse> Search([FromQuery] int skip = 0)
         {
             int apiUserKm = await _userDaraService.FindApiUserGeoKm(_apiUserId);
             bool apiUserGeoEnabled = await _userDaraService.FindApiUserGeoEnabled(_apiUserId);
@@ -39,24 +39,34 @@ namespace Library.WebApi.v1.Controllers
             return new EligibleProfilesResponce(profilesId);
         }
 
+        /// <summary>
+        /// Method required for viewing profile from dialogs.
+        /// Doesn't return common subscriptions but ALL profile subs instead
+        /// </summary>
+        /// <param name="apiUserProfileId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("view_profile/{apiUserProfileId}")]
+        public async Task<IResponse> View([FromRoute] Guid apiUserProfileId)
+        {
+            DatingProfile profile = await _datingService.ViewProfile(apiUserProfileId);
+            return new EligibleProfileResponce(profile);
+        }
+
 
         [HttpPatch]
-        [Route("reaction_on/{profileId}")]
+        [Route("reaction_on/{apiUserProfileId}")]
         public async Task<IResponse> Reaction(
-            [FromRoute]string profileId,
+            [FromRoute]Guid apiUserProfileId,
             [FromBody]ReactionRequest reactionRequest) 
         {
             Reaction reaction = reactionRequest.Reaction;
-            bool ok = await _datingService.ProfileReaction(_apiUserId.ToString(), profileId, reaction);
-            if (ok)
-            {
-                HttpContext.Response.StatusCode = 200;
-            }
-            else 
-            {
-                HttpContext.Response.StatusCode = 404;
-            }
-            return null;
+            RelationStatus status = await _datingService.ReactionOnProfile(
+                requester:_apiUserId, 
+                responser: apiUserProfileId, 
+                reaction: reaction);
+
+            return new ReactionResponse((int)status);
         }
     }
 }
