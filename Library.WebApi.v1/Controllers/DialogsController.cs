@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Library.WebApi.v1.Controllers
@@ -17,6 +18,7 @@ namespace Library.WebApi.v1.Controllers
     public class DialogsController : ControllerBase
     {
         private readonly IDialogService _dialogService;
+        private Guid _apiUserId => Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
         public DialogsController(IDialogService dialogService)
         {
@@ -24,19 +26,16 @@ namespace Library.WebApi.v1.Controllers
         }
 
         [HttpGet]
-        [Route("dialogsbyuser/{internalUserId}")]
-        public async Task<DialogPreview[]> PreviewDialogs(
-            [FromRoute]string internalUserId) 
+        [Route("my_dialogs")]
+        public async Task<DialogPreview[]> PreviewDialogs() 
         {
-            DialogPreview[] dialogs = await _dialogService.PreviewDialogs(internalUserId);
+            DialogPreview[] dialogs = await _dialogService.PreviewDialogs(_apiUserId);
             return dialogs;
         }
 
         [HttpGet]
         [Route("dialog/{dialogId}")]
-        public async Task<Dialog> OpenDialog(
-            [FromRoute] string dialogId
-            )
+        public async Task<Dialog> OpenDialog([FromRoute] Guid dialogId)
         {
             Dialog dialog = await _dialogService.OpenDialog(dialogId);
             return dialog;
@@ -45,7 +44,7 @@ namespace Library.WebApi.v1.Controllers
         [HttpGet]
         [Route("dialog/{dialogId}/moremessages")]
         public async Task<Message[]> MoreMessages(
-            [FromRoute] string dialogId,
+            [FromRoute] Guid dialogId,
             [FromQuery] int offset,
             [FromQuery] int count) 
         {
@@ -57,22 +56,19 @@ namespace Library.WebApi.v1.Controllers
         [HttpPost]
         [Route("dialog/{dialogId}")]
         public async Task<bool> SendMessage(
-            [FromHeader] string internalUserId,
-            [FromRoute]string dialogId,
+            [FromRoute]Guid dialogId,
             [FromBody] SendMessageIntoDialogRequest request) 
         {
-            return await _dialogService.SendMessageIntoDialog(internalUserId, dialogId, request.MessageText);
+            return await _dialogService.SendMessageIntoDialog(_apiUserId, dialogId, request.MessageText);
         }
 
 
 
         [HttpDelete]
-        [Route("dialog/{internalId}")]
-        public async Task<bool> DeleteDialog(
-            [FromRoute]string internalId,
-            [FromHeader] string internalBearerToken) 
+        [Route("dialog/{dialogId}")]
+        public async Task<bool> DeleteDialog(Guid dialogId) 
         {
-            bool deleted = await _dialogService.DeleteDialog(internalId);
+            bool deleted = await _dialogService.DeleteDialog(dialogId);
             return deleted;
         }
 

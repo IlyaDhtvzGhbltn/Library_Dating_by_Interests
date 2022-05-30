@@ -13,5 +13,6 @@ namespace Library.Entities
         public Guid Creator { get; set; }
         public Guid Invited { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<ApiUser> Participants { get; set; }
     }
 }
