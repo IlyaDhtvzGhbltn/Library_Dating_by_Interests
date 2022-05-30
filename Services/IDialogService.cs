@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Library.Services
 {
-    public interface IDialogService
+    public interface IDialogService : IService
     {
         Task<DialogPreview[]> PreviewDialogs(Guid apiUserId);
         Task<Dialog> OpenDialog(Guid dialogId);

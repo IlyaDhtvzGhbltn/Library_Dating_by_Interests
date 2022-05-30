@@ -6,6 +6,8 @@ using DTOMessage = Library.Contracts.MobileAndLibraryAPI.DTO.Dialog.Message;
 using DTODialog = Library.Contracts.MobileAndLibraryAPI.DTO.Dialog.Dialog;
 using System.Linq;
 using System.Threading.Tasks;
+using Library.WebApi.v1.Infrastructure.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library.WebApi.v1.Services
 {
@@ -35,10 +37,40 @@ namespace Library.WebApi.v1.Services
             throw new NotImplementedException();
         }
 
-        public Task<DialogPreview[]> PreviewDialogs(Guid apiUserId)
+        public async Task<DialogPreview[]> PreviewDialogs(Guid apiUserId)
         {
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser user = await this.FindUserById(context, apiUserId);
+                var userDialogs = context.Dialogs
+                    .Include(x => x.Messages)
+                    .Include(x => x.Participants).ThenInclude(p => p.Photos)
+                    .Where(x => x.Participants.Contains(user))
+                    .ToArray();
 
-            return null;
+                var previews = new DialogPreview[userDialogs.Length];
+                for (int i = 0; i < userDialogs.Length; i++) 
+                {
+                    var lastMessage = userDialogs[i].Messages.Last();
+                    var interlocutor = userDialogs[i].Participants.First(p => p.Id != user.Id);
+
+                    var dialogPreview = new DialogPreview();
+                    dialogPreview.LastMessageSentDate = lastMessage.SendingTime;
+                    string lastMessageText = lastMessage.Text;
+                    string cutLastMessage = (lastMessageText.Length <= 200) ? lastMessageText : lastMessageText.Substring(0, 199);
+                    dialogPreview.LastMessageCuttedText = cutLastMessage;
+                    dialogPreview.DialogId = userDialogs[i].Id;
+                    dialogPreview.Interlocutor = new Interlocutor
+                    {
+                        Avatar = interlocutor.Photos.First(p => p.IsAvatar == true).PhotoUrl,
+                        Name = interlocutor.UserName
+                    };
+
+                    previews[i] = dialogPreview;
+
+                }
+                return previews;
+            }
         }
 
         public Task<bool> SendMessageIntoDialog(Guid senderId, Guid dialogId, string text)
