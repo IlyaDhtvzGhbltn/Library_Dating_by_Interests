@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.Contracts.MobileAndLibraryAPI.DTO.Dating;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,13 +16,10 @@ namespace Library.Entities
         [ForeignKey("ApiUser_Relation_Requester")]
         public ApiUser Requester { get; set; }
 
-        [Required]
-        public bool IsRequesterPositiveReaction { get; set; }
-
         [ForeignKey("ApiUser_Relation_Responser")]
         public ApiUser Responser { get; set; }
 
         [Required]
-        public bool IsResponserPositiveReaction { get; set; }
+        public RelationStatus RelationStatus { get; set; }
     }
 }

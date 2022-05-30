@@ -4,35 +4,22 @@ using Library.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.Entities.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    partial class LibraryDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220530104833_UsersRelation_tbo_updated")]
+    partial class UsersRelation_tbo_updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ApiUserDialog", b =>
-                {
-                    b.Property<Guid>("DialogsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ParticipantsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("DialogsId", "ParticipantsId");
-
-                    b.HasIndex("ParticipantsId");
-
-                    b.ToTable("ApiUserDialog");
-                });
 
             modelBuilder.Entity("Library.Entities.ApiUser_YoutubeChannel", b =>
                 {
@@ -81,6 +68,9 @@ namespace Library.Entities.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ApiUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid>("Creator")
                         .HasColumnType("uniqueidentifier");
 
@@ -89,13 +79,14 @@ namespace Library.Entities.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApiUserId");
+
                     b.ToTable("Dialogs");
                 });
 
             modelBuilder.Entity("Library.Entities.Message", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("DialogId")
@@ -426,21 +417,6 @@ namespace Library.Entities.Migrations
                     b.HasDiscriminator().HasValue("ApiUser");
                 });
 
-            modelBuilder.Entity("ApiUserDialog", b =>
-                {
-                    b.HasOne("Library.Entities.Dialog", null)
-                        .WithMany()
-                        .HasForeignKey("DialogsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Library.Entities.ApiUser", null)
-                        .WithMany()
-                        .HasForeignKey("ParticipantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Library.Entities.ApiUser_YoutubeChannel", b =>
                 {
                     b.HasOne("Library.Entities.ApiUser", "ApiUser")
@@ -458,6 +434,13 @@ namespace Library.Entities.Migrations
                     b.Navigation("ApiUser");
 
                     b.Navigation("YoutubeChanell");
+                });
+
+            modelBuilder.Entity("Library.Entities.Dialog", b =>
+                {
+                    b.HasOne("Library.Entities.ApiUser", null)
+                        .WithMany("Dialogs")
+                        .HasForeignKey("ApiUserId");
                 });
 
             modelBuilder.Entity("Library.Entities.Message", b =>
@@ -584,6 +567,8 @@ namespace Library.Entities.Migrations
             modelBuilder.Entity("Library.Entities.ApiUser", b =>
                 {
                     b.Navigation("ApiUsers_YoutubeChannels");
+
+                    b.Navigation("Dialogs");
 
                     b.Navigation("Photos");
                 });

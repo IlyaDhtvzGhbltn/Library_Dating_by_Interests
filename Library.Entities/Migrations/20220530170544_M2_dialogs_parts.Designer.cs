@@ -4,14 +4,16 @@ using Library.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.Entities.Migrations
 {
     [DbContext(typeof(LibraryDatabaseContext))]
-    partial class LibraryDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220530170544_wwwwwww")]
+    partial class wwwwwww
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,12 +83,6 @@ namespace Library.Entities.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Creator")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Invited")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.ToTable("Dialogs");
@@ -95,7 +91,6 @@ namespace Library.Entities.Migrations
             modelBuilder.Entity("Library.Entities.Message", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("DialogId")
@@ -155,8 +150,11 @@ namespace Library.Entities.Migrations
                     b.Property<string>("ApiUser_Relation_Responser")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("RelationStatus")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsRequesterPositiveReaction")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsResponserPositiveReaction")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

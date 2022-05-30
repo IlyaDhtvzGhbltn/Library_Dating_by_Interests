@@ -25,6 +25,7 @@ namespace Library.WebApi.v1.Infrastructure.Extensions
             IFactory<LibraryDatabaseContext> factory = CreateFactoryDBContext(configuration);
             services.AddSingleton<IUserDataService>(new UserDataService(factory));
             services.AddSingleton<IDatingService>(new DatingService(factory, new UserDataService(factory)));
+            services.AddSingleton<IDialogService>(new DialogService(factory));
 #elif Dummy
             services.AddSingleton<ISignInService<SignInRequest, SignInResponse>>
                 (new YouTubeDummySignInService<SignInRequest, SignInResponse>());

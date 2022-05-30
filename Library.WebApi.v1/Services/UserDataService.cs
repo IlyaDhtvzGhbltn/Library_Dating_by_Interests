@@ -104,7 +104,7 @@ namespace Library.WebApi.v1.Services
         {
             using (var context = _dbFactory.Create())
             {
-                var user = await this.FindUserById(context, internalId, "DatingCriterias");
+                ApiUser user = await this.FindUserById<DatingCriteriaEntry>(context, internalId, x => x.DatingCriterias);
                 if (user == null)
                 {
                     throw new NullReferenceException();
@@ -124,7 +124,7 @@ namespace Library.WebApi.v1.Services
         {
             using (var context = _dbFactory.Create())
             {
-                ApiUser user = await this.FindUserById(context, internalId, "Photos");
+                ApiUser user = await this.FindUserById(context, internalId, x => x.Photos);
                 if(user == null)
                 { 
                     throw new NullReferenceException(); 
@@ -140,7 +140,7 @@ namespace Library.WebApi.v1.Services
         {
             using (var context = _dbFactory.Create())
             {
-                ApiUser user = await this.FindUserById(context, apiUserId, "DatingCriterias");
+                ApiUser user = await this.FindUserById(context, apiUserId, x => x.DatingCriterias);
                 return new DatingCriteria()
                 {
                     Age = new AgeCriteria(
@@ -163,7 +163,7 @@ namespace Library.WebApi.v1.Services
         {
             using (var context = _dbFactory.Create())
             {
-                ApiUser user = await this.FindUserById(context, apiUserId, "DatingCriterias");
+                ApiUser user = await this.FindUserById(context, apiUserId, x => x.DatingCriterias);
                 return user.DatingCriterias.GeoRadiusKm;
             }
         }
@@ -172,7 +172,7 @@ namespace Library.WebApi.v1.Services
         {
             using (var context = _dbFactory.Create())
             {
-                ApiUser user = await this.FindUserById(context, apiUserId, "DatingCriterias");
+                ApiUser user = await this.FindUserById(context, apiUserId, x => x.DatingCriterias);
                 return user.DatingCriterias.EnableGeoCriteria;
             }
         }

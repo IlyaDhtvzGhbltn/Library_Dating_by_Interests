@@ -13,4 +13,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Library.Dto\Library.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

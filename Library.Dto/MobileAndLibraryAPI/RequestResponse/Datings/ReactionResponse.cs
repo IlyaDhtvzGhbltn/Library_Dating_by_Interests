@@ -5,12 +5,8 @@ using System.Text;
 
 namespace Library.Contracts.MobileAndLibraryAPI.RequestResponse.Datings
 {
-    public class ReactionResponse : IResponse
+    public class ReactionRequest : ApiRequest
     {
-        public ReactionResponse(int status)
-        {
-            Status = status;
-        }
-        public int Status { get; set; }
+        public Reaction Reaction { get; set; }
     }
 }
