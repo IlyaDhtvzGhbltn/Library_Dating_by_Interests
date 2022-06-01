@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Library.WebApi.v1.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Library.WebApi.v1.Services
 {
@@ -21,21 +22,7 @@ namespace Library.WebApi.v1.Services
         }
 
         
-        
-        public Task<bool> DeleteDialog(Guid dialogId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<DTOMessage[]> MoreMessages(Guid dialogId, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<DTODialog> OpenDialog(Guid dialogId)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public async Task<DialogPreview[]> PreviewDialogs(Guid apiUserId)
         {
@@ -73,7 +60,56 @@ namespace Library.WebApi.v1.Services
             }
         }
 
+        public async Task<DTODialog> OpenDialog(Guid dialogId, Guid requesterId)
+        {
+            string reqId = requesterId.ToString();
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser requester = await this.FindUserById(context, requesterId);
+                var dialogEntry = context.Dialogs
+                    .Include(x => x.Messages)
+                    .Include(x=>x.Participants).ThenInclude(y => y.Photos)
+                    .Where(x => x.Participants.Contains(requester))
+                    .FirstOrDefault(x => x.Id == dialogId);
+                if (dialogEntry == null)
+                    return null;
+
+                ApiUser interlocutorApiUser = dialogEntry.Participants
+                    .First(x => x.Id != reqId);
+
+                List<DTOMessage> messages = dialogEntry.Messages.Take(50)
+                    .Select(x => new DTOMessage 
+                    {
+                        MessageText = x.Text, 
+                        SentDate = x.SendingTime,
+                        Im = x.Sender.Id == reqId
+
+                    }).ToList();
+
+                var dialog = new DTODialog();
+                dialog.FriendsOnlineStatus = null;
+                dialog.IsFriendOnline = true;
+                dialog.Interlocutor = new Interlocutor
+                {
+                    Avatar = interlocutorApiUser.Photos.First(x => x.IsAvatar == true).PhotoUrl,
+                    Name = interlocutorApiUser.UserName
+                };
+                dialog.Messages = messages;
+                return dialog;
+            }
+        }
+
+        public Task<DTOMessage[]> MoreMessages(Guid dialogId, int offset, int count)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> SendMessageIntoDialog(Guid senderId, Guid dialogId, string text)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteDialog(Guid dialogId)
         {
             throw new NotImplementedException();
         }

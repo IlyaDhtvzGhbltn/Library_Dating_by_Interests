@@ -37,7 +37,11 @@ namespace Library.WebApi.v1.Controllers
         [Route("dialog/{dialogId}")]
         public async Task<Dialog> OpenDialog([FromRoute] Guid dialogId)
         {
-            Dialog dialog = await _dialogService.OpenDialog(dialogId);
+            Dialog dialog = await _dialogService.OpenDialog(dialogId, _apiUserId);
+            if (dialog == null)
+            { 
+                Response.StatusCode = 404; 
+            }
             return dialog;
         }
 
