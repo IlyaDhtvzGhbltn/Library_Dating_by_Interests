@@ -99,9 +99,28 @@ namespace Library.WebApi.v1.Services
             }
         }
 
-        public Task<DTOMessage[]> MoreMessages(Guid dialogId, int offset, int count)
+        public async Task<DTOMessage[]> MoreMessages(Guid dialogId, Guid requesterId, int skip, int count)
         {
-            throw new NotImplementedException();
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser requester = await this.FindUserById(context, requesterId);
+                var dialogEntry = context.Dialogs
+                    .Include(x => x.Messages)
+                    .Include(x => x.Participants).ThenInclude(y => y.Photos)
+                    .Where(x => x.Participants.Contains(requester))
+                    .FirstOrDefault(x => x.Id == dialogId);
+
+                var messages = dialogEntry.Messages.Skip(skip).Take(count)
+                    .Select(x => new DTOMessage 
+                    {
+                        MessageText = x.Text, 
+                        SentDate = x.SendingTime,
+                        Im = x.Sender == requester
+                    })
+                    .ToArray();
+
+                return messages;
+            }
         }
 
         public Task<bool> SendMessageIntoDialog(Guid senderId, Guid dialogId, string text)

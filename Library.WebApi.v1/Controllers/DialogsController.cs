@@ -52,13 +52,13 @@ namespace Library.WebApi.v1.Controllers
             [FromQuery] int offset,
             [FromQuery] int count) 
         {
-            var oldMessages = await _dialogService.MoreMessages(dialogId, offset, count);
+            var oldMessages = await _dialogService.MoreMessages(dialogId, _apiUserId, offset, count);
             return oldMessages;
         }
 
 
         [HttpPost]
-        [Route("dialog/{dialogId}")]
+        [Route("dialog/{dialogId}/send_message")]
         public async Task<bool> SendMessage(
             [FromRoute]Guid dialogId,
             [FromBody] SendMessageIntoDialogRequest request) 
