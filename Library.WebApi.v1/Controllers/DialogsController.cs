@@ -37,7 +37,11 @@ namespace Library.WebApi.v1.Controllers
         [Route("dialog/{dialogId}")]
         public async Task<Dialog> OpenDialog([FromRoute] Guid dialogId)
         {
-            Dialog dialog = await _dialogService.OpenDialog(dialogId);
+            Dialog dialog = await _dialogService.OpenDialog(dialogId, _apiUserId);
+            if (dialog == null)
+            { 
+                Response.StatusCode = 404; 
+            }
             return dialog;
         }
 
@@ -48,18 +52,22 @@ namespace Library.WebApi.v1.Controllers
             [FromQuery] int offset,
             [FromQuery] int count) 
         {
-            var oldMessages = await _dialogService.MoreMessages(dialogId, offset, count);
+            var oldMessages = await _dialogService.MoreMessages(dialogId, _apiUserId, offset, count);
+            if (oldMessages == null)
+            {
+                Response.StatusCode = 404;
+            }
             return oldMessages;
         }
 
 
         [HttpPost]
-        [Route("dialog/{dialogId}")]
+        [Route("dialog/{dialogId}/send_message")]
         public async Task<bool> SendMessage(
             [FromRoute]Guid dialogId,
             [FromBody] SendMessageIntoDialogRequest request) 
         {
-            return await _dialogService.SendMessageIntoDialog(_apiUserId, dialogId, request.MessageText);
+            return await _dialogService.SendMessageIntoDialog(_apiUserId, dialogId, request.MessageText, request.ClientTime);
         }
 
 
@@ -68,7 +76,11 @@ namespace Library.WebApi.v1.Controllers
         [Route("dialog/{dialogId}")]
         public async Task<bool> DeleteDialog(Guid dialogId) 
         {
-            bool deleted = await _dialogService.DeleteDialog(dialogId);
+            bool deleted = await _dialogService.DeleteDialog(dialogId, _apiUserId);
+            if (!deleted) 
+            {
+                Response.StatusCode = 404;
+            }
             return deleted;
         }
 

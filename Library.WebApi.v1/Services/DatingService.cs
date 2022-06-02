@@ -6,11 +6,10 @@ using DTOPhoto = Library.Contracts.MobileAndLibraryAPI.DTO.Profile.Photo;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Library.WebApi.v1.Infrastructure.Extensions;
 using Library.Contracts.MobileAndLibraryAPI.DTO.Profile;
-using System.Collections.Generic;
 using Library.Contracts.MobileAndLibraryAPI.DTO;
+using System.Collections.Generic;
 
 namespace Library.WebApi.v1.Services
 {
@@ -147,13 +146,20 @@ namespace Library.WebApi.v1.Services
 
         private async Task<Guid> CreateDialog(LibraryDatabaseContext context, Guid requester, Guid responser)
         {
-            context.Dialogs.Add(
-                new Dialog 
-                {
-                    Creator = requester,
-                    Invited = responser
-                });
+            ApiUser requesterApiUser = await this.FindUserById(context, requester);
+            ApiUser responserApiUser = await this.FindUserById(context, responser);
+            var dialogModel = new Dialog
+            {
+                Creator = requester,
+                Invited = responser,
+                Participants = new List<ApiUser>()
+            };
+            dialogModel.Participants.Add(requesterApiUser);
+            dialogModel.Participants.Add(responserApiUser);
+
+            context.Dialogs.Add(dialogModel);
             context.SaveChanges();
+
             var dialog = await context.Dialogs.FirstAsync(x => x.Creator == requester && x.Invited == responser);
             return dialog.Id;
         }
@@ -177,7 +183,7 @@ namespace Library.WebApi.v1.Services
             string requesterId = requester.ToString();
             string responserId = responser.ToString();
             UsersRelation relation = context.UsersRelations
-                .Where(x => x.Requester.Id == requesterId || x.Responser.Id == responserId)
+                .Where(x => x.Requester.Id == requesterId && x.Responser.Id == responserId)
                 .FirstOrDefault();
             return relation;
         }
