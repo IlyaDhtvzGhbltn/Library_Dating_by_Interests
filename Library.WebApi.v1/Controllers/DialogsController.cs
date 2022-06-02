@@ -76,7 +76,11 @@ namespace Library.WebApi.v1.Controllers
         [Route("dialog/{dialogId}")]
         public async Task<bool> DeleteDialog(Guid dialogId) 
         {
-            bool deleted = await _dialogService.DeleteDialog(dialogId);
+            bool deleted = await _dialogService.DeleteDialog(dialogId, _apiUserId);
+            if (!deleted) 
+            {
+                Response.StatusCode = 404;
+            }
             return deleted;
         }
 

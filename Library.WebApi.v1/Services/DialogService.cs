@@ -135,33 +135,59 @@ namespace Library.WebApi.v1.Services
                     .Include(x => x.Participants).ThenInclude(y => y.Photos)
                     .Where(x => x.Participants.Contains(requester))
                     .FirstOrDefault(x => x.Id == dialogId);
-                ApiUser interlocuter = dialogEntry.Participants.First(x => x.Id != requester.Id);
-                UsersRelation relation = context.UsersRelations
-                    .Where(x => x.Requester == requester && x.Responser == interlocuter ||
-                    x.Requester == interlocuter && x.Responser == requester)
-                    .FirstOrDefault();
-                RelationStatus relationStatus = relation.RelationStatus;
-                if (relationStatus == RelationStatus.PositiveResponse)
-                {
-                    var message = new Entities.Message();
-                    message.Sender = requester;
-                    message.Text = text;
-                    message.SendingTime = userSendingTime;
-
-                    dialogEntry.Messages.Add(message);
-                    context.SaveChanges();
-                    return true;
-                }
-                else 
+                if (dialogEntry == null)
                 {
                     return false;
+                }
+                else
+                {
+                    ApiUser interlocuter = dialogEntry.Participants.First(x => x.Id != requester.Id);
+                    UsersRelation relation = context.UsersRelations
+                        .Where(x => x.Requester == requester && x.Responser == interlocuter ||
+                        x.Requester == interlocuter && x.Responser == requester)
+                        .FirstOrDefault();
+                    RelationStatus relationStatus = relation.RelationStatus;
+                    if (relationStatus == RelationStatus.PositiveResponse)
+                    {
+                        var message = new Entities.Message();
+                        message.Sender = requester;
+                        message.Text = text;
+                        message.SendingTime = userSendingTime;
+
+                        dialogEntry.Messages.Add(message);
+                        context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
         }
 
-        public Task<bool> DeleteDialog(Guid dialogId)
+        public async Task<bool> DeleteDialog(Guid dialogId, Guid requesterId)
         {
-            throw new NotImplementedException();
+            using (var context = _dbFactory.Create())
+            {
+                ApiUser requester = await this.FindUserById(context, requesterId);
+                var dialogEntry = context.Dialogs
+                    .Include(x => x.Messages)
+                    .Where(x => x.Participants.Contains(requester))
+                    .FirstOrDefault(x => x.Id == dialogId);
+                if (dialogEntry == null)
+                {
+                    return false;
+                }
+                else 
+                {
+                    context.Messages.RemoveRange(dialogEntry.Messages);
+                    context.Dialogs.Remove(dialogEntry);
+                    context.SaveChanges();
+
+                    return true;
+                }
+            }
         }
     }
 }
