@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Library.WebApi.v1.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Library.Contracts.MobileAndLibraryAPI.DTO.Dating;
 
 namespace Library.WebApi.v1.Services
 {
@@ -109,6 +110,8 @@ namespace Library.WebApi.v1.Services
                     .Include(x => x.Participants).ThenInclude(y => y.Photos)
                     .Where(x => x.Participants.Contains(requester))
                     .FirstOrDefault(x => x.Id == dialogId);
+                if (dialogEntry == null)
+                    return null;
 
                 var messages = dialogEntry.Messages.Skip(skip).Take(count)
                     .Select(x => new DTOMessage 
@@ -118,14 +121,42 @@ namespace Library.WebApi.v1.Services
                         Im = x.Sender == requester
                     })
                     .ToArray();
-
                 return messages;
             }
         }
 
-        public Task<bool> SendMessageIntoDialog(Guid senderId, Guid dialogId, string text)
+        public async Task<bool> SendMessageIntoDialog(Guid requesterId, Guid dialogId, string text, DateTime userSendingTime)
         {
-            throw new NotImplementedException();
+            using (var context = _dbFactory.Create()) 
+            {
+                ApiUser requester = await this.FindUserById(context, requesterId);
+                var dialogEntry = context.Dialogs
+                    .Include(x=>x.Messages)
+                    .Include(x => x.Participants).ThenInclude(y => y.Photos)
+                    .Where(x => x.Participants.Contains(requester))
+                    .FirstOrDefault(x => x.Id == dialogId);
+                ApiUser interlocuter = dialogEntry.Participants.First(x => x.Id != requester.Id);
+                UsersRelation relation = context.UsersRelations
+                    .Where(x => x.Requester == requester && x.Responser == interlocuter ||
+                    x.Requester == interlocuter && x.Responser == requester)
+                    .FirstOrDefault();
+                RelationStatus relationStatus = relation.RelationStatus;
+                if (relationStatus == RelationStatus.PositiveResponse)
+                {
+                    var message = new Entities.Message();
+                    message.Sender = requester;
+                    message.Text = text;
+                    message.SendingTime = userSendingTime;
+
+                    dialogEntry.Messages.Add(message);
+                    context.SaveChanges();
+                    return true;
+                }
+                else 
+                {
+                    return false;
+                }
+            }
         }
 
         public Task<bool> DeleteDialog(Guid dialogId)

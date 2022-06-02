@@ -53,6 +53,10 @@ namespace Library.WebApi.v1.Controllers
             [FromQuery] int count) 
         {
             var oldMessages = await _dialogService.MoreMessages(dialogId, _apiUserId, offset, count);
+            if (oldMessages == null)
+            {
+                Response.StatusCode = 404;
+            }
             return oldMessages;
         }
 
@@ -63,7 +67,7 @@ namespace Library.WebApi.v1.Controllers
             [FromRoute]Guid dialogId,
             [FromBody] SendMessageIntoDialogRequest request) 
         {
-            return await _dialogService.SendMessageIntoDialog(_apiUserId, dialogId, request.MessageText);
+            return await _dialogService.SendMessageIntoDialog(_apiUserId, dialogId, request.MessageText, request.ClientTime);
         }
 
 
