@@ -44,3 +44,6 @@ Implement UserDataService working with DB
 
 009
 Implement DatingService working with DB
+
+012
+Implement schematic interface on android
